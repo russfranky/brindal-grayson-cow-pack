@@ -21,7 +21,13 @@ if [[ -f "$ROOT/requirements.txt" ]]; then
   pip3 install -r "$ROOT/requirements.txt" -q 2>/dev/null || true
 fi
 
-python3 "$CHAOS/scripts/build_all.py" --rebuild-textures
+VENICE_FLAG=""
+if [[ -n "${VENICE_API_KEY:-}" || -n "${VENICE_INFERENCE_KEY:-}" ]]; then
+  echo ">>> Venice API key detected — generating featured AI textures"
+  VENICE_FLAG="--venice"
+fi
+
+python3 "$CHAOS/scripts/build_all.py" --rebuild-textures $VENICE_FLAG
 
 echo ""
 echo "=============================================="

@@ -126,7 +126,7 @@ def generate_style_anchor(manifest: dict, *, dry_run: bool = False) -> bool:
     try:
         raw = generate_image(
             anchor["prompt"] + STYLE_SUFFIX,
-            model=anchor.get("model", "flux-dev"),
+            model=anchor.get("model", "flux-2-pro"),
             width=anchor.get("generate_size", 1024),
             height=anchor.get("generate_size", 1024),
         )

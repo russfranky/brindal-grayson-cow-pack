@@ -195,8 +195,53 @@
       "model": "gpt-image-2",
       "generate_size": 1024,
       "target_size": 512,
-      "pack_path": "textures/ui/panorama/panorama_0.png",
-      "prompt": "Minecraft-style 3D rendered landscape, 512x512. Rolling green hills absolutely packed with hundreds of Minecraft cows in every direction. Some cows are stacked on top of each other. Cow-print clouds in the sky. The sun is a giant cowbell. Rivers of milk flow between the hills. A wooden sign reads \"Welcome Brindal & Grayson!\" Blocky Minecraft aesthetic, warm golden hour lighting."
+      "pack_path": "textures/ui/panorama_0.png",
+      "prompt": "Minecraft-style blocky landscape panorama face, 512x512. Rolling green hills packed with hundreds of Minecraft cows. Cow-print clouds, giant golden cowbell sun, rivers of milk. Wooden sign: Welcome Brindal & Grayson! Warm golden hour. Front view."
+    },
+    {
+      "id": "panorama_1",
+      "category": "panorama",
+      "model": "gpt-image-2",
+      "generate_size": 1024,
+      "target_size": 512,
+      "pack_path": "textures/ui/panorama_1.png",
+      "prompt": "Minecraft-style blocky landscape panorama cubemap face, 512x512. Hills covered in cows, milk rivers, cowbell sun on horizon. Right side view of cow world. Warm colors, blocky aesthetic."
+    },
+    {
+      "id": "panorama_2",
+      "category": "panorama",
+      "model": "gpt-image-2",
+      "generate_size": 1024,
+      "target_size": 512,
+      "pack_path": "textures/ui/panorama_2.png",
+      "prompt": "Minecraft-style blocky landscape panorama cubemap face, 512x512. Back view of endless cow herds on green hills, cow-print sky, silly and joyful. Blocky Minecraft aesthetic."
+    },
+    {
+      "id": "panorama_3",
+      "category": "panorama",
+      "model": "gpt-image-2",
+      "generate_size": 1024,
+      "target_size": 512,
+      "pack_path": "textures/ui/panorama_3.png",
+      "prompt": "Minecraft-style blocky landscape panorama cubemap face, 512x512. Left side view of cow-covered hills, milk streams, cowbell sun. Brindal and Grayson cow world. Warm golden light."
+    },
+    {
+      "id": "panorama_4",
+      "category": "panorama",
+      "model": "gpt-image-2",
+      "generate_size": 1024,
+      "target_size": 512,
+      "pack_path": "textures/ui/panorama_4.png",
+      "prompt": "Minecraft-style sky panorama cubemap face looking up, 512x512. Cow-print clouds, giant glowing cowbell sun radiating light beams, blocky blue sky. Flat pixel art Minecraft style."
+    },
+    {
+      "id": "panorama_5",
+      "category": "panorama",
+      "model": "gpt-image-2",
+      "generate_size": 1024,
+      "target_size": 512,
+      "pack_path": "textures/ui/panorama_5.png",
+      "prompt": "Minecraft-style ground panorama cubemap face looking down, 512x512. Grass blocks with cow hoof prints, dirt with cow spots, blocky top-down Minecraft terrain."
     }
   ]
 }
