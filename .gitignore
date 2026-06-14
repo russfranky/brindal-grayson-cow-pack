@@ -1,0 +1,27 @@
+# Build artifacts
+dist/
+*.mcaddon
+*.mcpack
+*.zip
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor directories
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Python (used for texture generation)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Minecraft local development copies
+development_behavior_packs/
+development_resource_packs/
