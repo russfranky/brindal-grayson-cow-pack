@@ -1,10 +1,21 @@
 # Cow World Commands
 
-Fun commands for **Brindal** and **Grayson**!
+Fun for **Brindal** and **Grayson** — **no typing needed!**
 
-<p align="center">
-  <img src="assets/commands-card.png" alt="Command reference card" width="700">
-</p>
+## Play without typing (best for kids)
+
+| What to do | What happens |
+|------------|--------------|
+| **Tap the Cow Bell** in your bag | Random surprise — dance, fireworks, jokes, party! |
+| **Tap Cow Snack** (wheat) | A cow pops in and moos |
+| **Pet Brindal or Grayson** (tap the cow) | Group hug + cookies |
+| **Just play** | Surprise cow moments every ~90 seconds |
+
+On first join you get a **Cow Bell**, **Cow Snack**, cookies, and both family cows spawn beside you.
+
+---
+
+## Chat commands (optional — for parents)
 
 **Requires Beta APIs** enabled when creating the world.
 

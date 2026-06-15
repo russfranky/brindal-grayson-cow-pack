@@ -61,13 +61,14 @@ This part matters — **don't use an old world**.
 
 ### 4. Let the kids play!
 
-Open chat (tap the chat icon) and type:
+Open the **inventory** (⋯ at bottom of screen) and **tap the Cow Bell** — a random cow surprise happens!
 
-```
-!moo
-```
+Kids can also:
+- **Tap Cow Snack** (wheat) for a moo and a new cow
+- **Walk up and tap Brindal or Grayson** for a hug and cookies
+- Just explore — silly cow surprises pop up about every minute
 
-A cow should appear. Try `!party`, `!b`, and `!g` next.
+> **Parents:** chat commands like `!moo` still work if you want them. See [COMMANDS.md](COMMANDS.md).
 
 ## Commands cheat sheet (printable)
 
@@ -75,17 +76,9 @@ Give the kids this list:
 
 | Type this | What happens |
 |-----------|--------------|
-| `!surprise` | Random cow chaos! |
-| `!moo` | Spawn a cow |
-| `!dance` | Cow dance party |
-| `!b` | Brindal's cow |
-| `!g` | Grayson's cow |
-| `!party` | Cow party! |
-| `!rain` | Raining cows |
-| `!mega` | SO many cows |
-| `!heal` | Get healed |
-| `!fly` | Float up |
-| `!help` | See all commands |
+| Tap **Cow Bell** | Random surprise! |
+| Tap **Cow Snack** | Spawn a cow |
+| Pet **Brindal** or **Grayson** | Hug + cookies |
 
 Full list with every shortcut: [COMMANDS.md](COMMANDS.md)
 

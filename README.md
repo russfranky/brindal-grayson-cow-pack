@@ -13,7 +13,7 @@ Meet two named family cows in the world, use easy chat commands for cow parties 
 | **Brindal Cow** | Brown with white spots — spawns in the world, or type `!b` |
 | **Grayson Cow** | Gray with dark spots — spawns in the world, or type `!g` |
 | **First join** | Brindal & Grayson greet you with wheat to feed them |
-| **Commands** | `!surprise`, `!dance`, `!moo`, `!party`, and 23 more — needs **Beta APIs** |
+| **Commands** | Tap **Cow Bell** in bag — or optional `!` chat for parents |
 | **Pack size** | Lite overlay (~750 KB) — fast on iPad |
 
 <p align="center">
@@ -53,18 +53,17 @@ Then under world settings, activate **both** packs:
 
 ### Step 4 — Play!
 
-Open chat and try:
+Open inventory → **tap the Cow Bell** for a random cow surprise!
+
+Kids can also tap **Cow Snack**, pet **Brindal & Grayson**, or just play — fun happens automatically.
 
 ```
-!surprise
-!moo
-!party
-!dance
-!b
-!g
+Cow Bell  →  surprise!
+Cow Snack →  moo!
+Pet cows  →  hug!
 ```
 
-Or type `/` and search for `bgcow:` commands.
+Optional chat commands for parents: `!moo`, `!party`, `!help` — see [docs/COMMANDS.md](docs/COMMANDS.md).
 
 📖 **Full install guide:** [docs/installation.md](docs/installation.md)  
 🎮 **All commands:** [docs/COMMANDS.md](docs/COMMANDS.md)

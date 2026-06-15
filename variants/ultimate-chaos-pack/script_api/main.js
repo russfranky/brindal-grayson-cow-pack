@@ -88,6 +88,13 @@ const COW_JOKES = [
   "What's a cow's favorite party game? Moo-sical chairs!",
 ];
 
+const COW_BELL_NAME = "Cow Bell";
+const COW_SNACK_NAME = "Cow Snack";
+const AUTO_FUN_MS = 90_000;
+const playerLastAutoFun = new Map();
+
+const LIGHT_AUTO_FUN = ["moo", "joke", "milk", "heal"];
+
 function spawn(dim, typeId, loc) {
   try {
     return dim.spawnEntity(typeId, loc);
@@ -150,6 +157,62 @@ function runFor(origin, fn) {
   if (!player) return fail("You need to be a player!");
   system.run(() => fn(player));
   return ok("Moo!");
+}
+
+function isCowBell(stack) {
+  return (
+    stack?.typeId === "minecraft:bell" &&
+    (stack.nameTag ?? "").includes(COW_BELL_NAME)
+  );
+}
+
+function isCowSnack(stack) {
+  return (
+    stack?.typeId === "minecraft:wheat" &&
+    (stack.nameTag ?? "").includes(COW_SNACK_NAME)
+  );
+}
+
+function givePlayItems(player) {
+  try {
+    const inv = player.getComponent("minecraft:inventory")?.container;
+    if (!inv) return;
+    const bell = new ItemStack("minecraft:bell", 1);
+    bell.nameTag = COW_BELL_NAME;
+    inv.addItem(bell);
+    const snack = new ItemStack("wheat", 8);
+    snack.nameTag = COW_SNACK_NAME;
+    inv.addItem(snack);
+    inv.addItem(new ItemStack("cookie", 4));
+  } catch (_) {
+    /* ignore */
+  }
+}
+
+function ensureCowBell(player) {
+  try {
+    const inv = player.getComponent("minecraft:inventory")?.container;
+    if (!inv) return;
+    for (let i = 0; i < inv.size; i++) {
+      const item = inv.getItem(i);
+      if (isCowBell(item)) return;
+    }
+    const bell = new ItemStack("minecraft:bell", 1);
+    bell.nameTag = COW_BELL_NAME;
+    inv.addItem(bell);
+  } catch (_) {
+    /* ignore */
+  }
+}
+
+function autoFunTick(player) {
+  const now = Date.now();
+  const last = playerLastAutoFun.get(player.id) ?? 0;
+  if (now - last < AUTO_FUN_MS) return;
+  playerLastAutoFun.set(player.id, now);
+  const pick = LIGHT_AUTO_FUN[Math.floor(Math.random() * LIGHT_AUTO_FUN.length)];
+  HANDLERS[pick](player);
+  title(player, "Surprise cow moment!");
 }
 
 // ─── Command handlers ──────────────────────────────────────────────────────
@@ -461,7 +524,7 @@ const HCF_HINT =
   "Custom cows need Holiday Creator Features ON. Ask a grown-up to make a NEW world with Holiday Creator Features enabled.";
 
 const UNKNOWN_CMD_HINT =
-  "Unknown command. Try !surprise !moo !party !dance — or !help for all commands.";
+  "Tap your Cow Bell in your bag for surprises — or pet Brindal & Grayson!";
 
 const STARTUP_WAIT_TICKS = 40;
 
@@ -580,26 +643,58 @@ world.beforeEvents.chatSend.subscribe((event) => {
   system.run(() => HANDLERS[fnName](player));
 });
 
+// ─── No typing needed — bell, snacks, pet cows, auto fun ───────────────────
+
+world.beforeEvents.itemUse.subscribe((event) => {
+  const player = event.source;
+  const stack = event.itemStack;
+  if (!player || !stack) return;
+  if (isCowBell(stack)) {
+    event.cancel = true;
+    system.run(() => {
+      if (commandsReady) HANDLERS.surprise(player);
+      else sayBetaApisHint(player);
+    });
+    return;
+  }
+  if (isCowSnack(stack)) {
+    system.run(() => {
+      mooChorus(player, 2, 5);
+      spawn(playerDim(player), COW, near(player, { x: 1, y: 0, z: 0 }));
+      cowParticles(player);
+      title(player, "MOOO!");
+    });
+  }
+});
+
+world.afterEvents.playerInteractWithEntity.subscribe((event) => {
+  const player = event.player;
+  const target = event.target;
+  if (!player || !target) return;
+  if (target.typeId === BRINDAL || target.typeId === GRAYSON) {
+    system.run(() => HANDLERS.hug(player));
+  }
+});
+
+system.runInterval(() => {
+  if (!commandsReady) return;
+  for (const player of world.getPlayers()) {
+    autoFunTick(player);
+  }
+}, 100);
+
 // ─── Welcome new players ───────────────────────────────────────────────────
 
 function welcomePlayer(player) {
   mooChorus(player, 3, 8);
   fireworks(player);
   title(player, "Welcome to Moo World!");
-  say(player, "Meet Brindal & Grayson! Try §e!surprise §f§e!dance §f§e!party §f— or §e!help");
+  say(player, "§eTap the Cow Bell§f in your bag for surprises! §ePet Brindal & Grayson§f too!");
   spawnRing(player, COW, 6, 4);
   spawnCustomCow(player, BRINDAL, near(player, { x: 3, y: 0, z: 2 }), "Brindal");
   spawnCustomCow(player, GRAYSON, near(player, { x: -3, y: 0, z: 2 }), "Grayson");
   cowParticles(player);
-  try {
-    const inv = player.getComponent("minecraft:inventory")?.container;
-    if (inv) {
-      inv.addItem(new ItemStack("wheat", 8));
-      inv.addItem(new ItemStack("cookie", 4));
-    }
-  } catch (_) {
-    /* ignore */
-  }
+  givePlayItems(player);
 }
 
 function handleFirstJoin(player) {
@@ -624,7 +719,9 @@ function handleFirstJoin(player) {
 }
 
 world.afterEvents.playerSpawn.subscribe((event) => {
-  if (!event.initialSpawn) return;
   const player = event.player;
-  system.run(() => handleFirstJoin(player));
+  system.run(() => {
+    if (commandsReady) ensureCowBell(player);
+    if (event.initialSpawn) handleFirstJoin(player);
+  });
 });

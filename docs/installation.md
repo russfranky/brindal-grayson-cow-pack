@@ -25,7 +25,7 @@ Includes: cow-themed blocks and items, cow GUI, menu music, Brindal & Grayson cu
 | **1. Download** | Open link in Safari → tap Download |
 | **2. Import** | Tap file → **Open in Minecraft** |
 | **3. New world** | Holiday Creator Features **ON** + Beta APIs **ON** + both packs active |
-| **4. Play** | Type `!moo` in chat |
+| **4. Play** | Tap **Cow Bell** in inventory |
 
 ---
 
@@ -62,11 +62,10 @@ Before tapping **Create**, verify:
 
 ### Verify it works
 
-1. Open chat → type `!moo` → a cow appears
-2. Type `!b` → Brindal's brown cow appears
-3. Type `!g` → Grayson's gray cow appears
-4. Type `/bgcow:help` → full command list appears
-5. Diamond block shows **B**, gold block shows **G** (cow-themed textures)
+1. Open inventory → tap **Cow Bell** → something silly happens (dance, fireworks, joke, party…)
+2. Tap **Cow Snack** → a cow appears and moos
+3. Walk up to Brindal or Grayson → tap them → hug + cookies
+4. Diamond block shows **B**, gold block shows **G** (cow-themed textures)
 
 <p align="center">
   <img src="assets/family-cows.png" alt="Brindal and Grayson cows" width="500">
