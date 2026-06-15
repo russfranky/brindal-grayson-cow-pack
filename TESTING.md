@@ -33,6 +33,8 @@
    - [ ] Cow GUI / menu music (if applicable on device)
    - [ ] Brindal and Grayson cows spawn via `!b` / `!g` and are NOT removed by `!cowify`
    - [ ] `!moo`, `!party`, `/bgcow:help` work
+   - [ ] Typing `!mo` or another wrong shortcut shows a helpful hint (not silent)
+   - [ ] First join welcome appears (not a false Beta APIs warning when experiments are ON)
    - [ ] Behavior-pack description in world settings mentions Beta APIs
 
 ### Beta APIs OFF (negative test)

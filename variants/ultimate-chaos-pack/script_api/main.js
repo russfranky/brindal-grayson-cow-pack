@@ -327,6 +327,11 @@ let commandsReady = false;
 const BETA_APIS_HINT =
   "Fun commands need Beta APIs ON when you create the world. Ask a grown-up to make a NEW world with Beta APIs enabled.";
 
+const UNKNOWN_CMD_HINT =
+  "Unknown command. Try !moo !party !b !g — or !help for all commands.";
+
+const STARTUP_WAIT_TICKS = 40;
+
 function sayBetaApisHint(player) {
   say(player, BETA_APIS_HINT);
 }
@@ -407,7 +412,18 @@ world.beforeEvents.chatSend.subscribe((event) => {
   if (!msg.startsWith("!")) return;
   const key = msg.trim().toLowerCase().split(/\s+/)[0];
   const fnName = CHAT_ALIASES[key];
-  if (!fnName || !HANDLERS[fnName]) return;
+  if (!fnName || !HANDLERS[fnName]) {
+    event.cancel = true;
+    const player = event.sender;
+    system.run(() => {
+      if (!commandsReady) {
+        sayBetaApisHint(player);
+      } else {
+        say(player, UNKNOWN_CMD_HINT);
+      }
+    });
+    return;
+  }
   event.cancel = true;
   const player = event.sender;
   system.run(() => HANDLERS[fnName](player));
@@ -430,14 +446,29 @@ function welcomePlayer(player) {
   }
 }
 
-world.afterEvents.playerSpawn.subscribe((event) => {
-  if (!event.initialSpawn) return;
-  const player = event.player;
-  system.run(() => {
-    if (!commandsReady) {
+function handleFirstJoin(player) {
+  if (commandsReady) {
+    welcomePlayer(player);
+    return;
+  }
+  let waited = 0;
+  const waitForCommands = () => {
+    if (commandsReady) {
+      welcomePlayer(player);
+      return;
+    }
+    waited += 10;
+    if (waited >= STARTUP_WAIT_TICKS) {
       sayBetaApisHint(player);
       return;
     }
-    welcomePlayer(player);
-  });
+    system.runTimeout(waitForCommands, 10);
+  };
+  system.runTimeout(waitForCommands, 10);
+}
+
+world.afterEvents.playerSpawn.subscribe((event) => {
+  if (!event.initialSpawn) return;
+  const player = event.player;
+  system.run(() => handleFirstJoin(player));
 });
