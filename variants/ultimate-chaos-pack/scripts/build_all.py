@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Full build pipeline for Brindal & Grayson Ultimate Cow Pack."""
+"""Full build pipeline for Brindal & Grayson Cow World."""
 
 from __future__ import annotations
 
@@ -66,9 +66,10 @@ def build_all(rebuild_textures: bool = False, skip_package: bool = False, venice
     run_script("personalize_pack.py")
     run_script("merge_custom_cows.py")
     write_script_api()
+    # Procedural cow GUI textures + JSON UI/lang/sound overrides
     run_script("cowify_gui.py")
     run_script("apply_gui_overrides.py")
-
+    # Venice AI runs last — overrides featured textures (mobs, panoramas, pack_icon, etc.)
     if venice:
         run_script("venice_generate_textures.py", "--all")
 

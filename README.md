@@ -1,23 +1,25 @@
 <p align="center">
-  <img src="docs/assets/hero-banner.png" alt="Brindal & Grayson Cow World — Minecraft Bedrock add-on" width="100%">
+  <img src="docs/assets/hero-banner.png" alt="Brindal & Grayson Cow World — zombies, creepers, and skeletons in cow costumes" width="100%">
 </p>
 
 # Brindal & Grayson Cow World
 
 **A Minecraft Bedrock add-on for iPad** — built for Brindal and Grayson.
 
-Everything is cows. Zombies, creepers, blocks, the sun — all cows. Plus two special cows named just for them.
-
-<p align="center">
-  <img src="docs/assets/family-cows.png" alt="Brindal Cow and Grayson Cow" width="600">
-</p>
+Everything is cows. Zombies in cow suits, creeper milk cartons, a cowbell sun — plus two special cows named just for them.
 
 | | |
 |---|---|
 | **Brindal Cow** | Brown with white spots — `/summon bgcow:brindal_cow` or type `!b` |
 | **Grayson Cow** | Gray with dark spots — `/summon bgcow:grayson_cow` or type `!g` |
 | **Cow chaos** | 4,600+ cow-hide textures, all mobs become cows, cow moos everywhere |
+| **Cow GUI** | Cow-spot inventory backgrounds, moo button clicks, MOOcraft title screen |
+| **Venice AI art** | Featured mob skins, blocks, panoramas (when built with `VENICE_API_KEY`) |
 | **19 fun commands** | Cow parties, cow rain, flying, healing — type `!moo` or `/bgcow:party` |
+
+<p align="center">
+  <img src="docs/assets/family-cows.png" alt="Brindal Cow and Grayson Cow" width="600">
+</p>
 
 ---
 
@@ -140,9 +142,14 @@ If experiments cause trouble, use the lighter pack (textures only, no commands):
 
 ```bash
 pip3 install -r requirements.txt
+./scripts/build-mcaddon.sh                    # algorithmic + GUI
+export VENICE_API_KEY='your-key'              # optional AI textures
 ./scripts/build-mcaddon.sh
-python3 scripts/generate_docs_images.py   # regenerate README images
+python3 scripts/generate_docs_images.py         # regenerate README images
+./scripts/clean.sh                              # remove local build artifacts
 ```
+
+See [docs/development.md](docs/development.md) and [TESTING.md](TESTING.md).
 
 ---
 

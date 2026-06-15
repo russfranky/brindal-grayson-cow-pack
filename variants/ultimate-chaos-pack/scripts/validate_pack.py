@@ -22,7 +22,15 @@ MIN_TEXTURES = 4000
 MIN_ENTITY_OVERRIDES = 100
 MIN_BP_ENTITIES = 100
 MIN_SPAWN_ZEROED = 50
-MIN_LOOT_COWIFIED = 100
+
+CUSTOM_COW_TEXTURES = (
+    "textures/entity/brindal_cow.png",
+    "textures/entity/grayson_cow.png",
+)
+CUSTOM_COW_ENTITIES = (
+    "entity/brindal_cow.entity.json",
+    "entity/grayson_cow.entity.json",
+)
 
 
 def count_pngs(directory: Path) -> int:
@@ -125,9 +133,24 @@ def validate_manifests() -> list[str]:
     return errors
 
 
+def validate_custom_cows() -> list[str]:
+    errors = []
+    for rel in CUSTOM_COW_TEXTURES:
+        if not (PACK_RP / rel).exists():
+            errors.append(f"Missing custom cow texture: {rel}")
+    for rel in CUSTOM_COW_ENTITIES:
+        if not (PACK_RP / rel).exists():
+            errors.append(f"Missing custom cow entity: {rel}")
+    for name in ("brindal_cow.json", "grayson_cow.json"):
+        if not (PACK_BP / "entities" / name).exists():
+            errors.append(f"Missing custom cow behavior: entities/{name}")
+    return errors
+
+
 def validate() -> bool:
-    print("Validating Brindal & Grayson Ultimate Cow Pack...")
+    print("Validating Brindal & Grayson Cow World pack...")
     errors = validate_manifests()
+    errors.extend(validate_custom_cows())
 
     textures = count_pngs(PACK_RP / "textures")
     entity_overrides = count_entity_overrides(PACK_RP / "entity")

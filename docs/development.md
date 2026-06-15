@@ -1,87 +1,109 @@
 # Development Guide
 
-This repo has two add-ons. See [installation.md](installation.md) for which to use.
+This repo builds **one unified add-on** — `dist/brindal-grayson-cow-pack.mcaddon`. See [installation.md](installation.md) for iPad setup.
 
-## Custom Cows — layout
-
-| Path | Purpose |
-|------|---------|
-| `manifest.json` | Pack metadata and resource pack dependency |
-| `entities/` | Entity behavior definitions (AI, health, breeding) |
-| `spawn_rules/` | Natural spawn conditions |
-| `texts/` | Localization strings |
-
-### Resource Pack (`resource_packs/brindal_grayson_cow_rp/`)
+## Repository layout
 
 | Path | Purpose |
 |------|---------|
-| `manifest.json` | Pack metadata |
-| `entity/` | Client-side entity definitions (textures, animations) |
+| `resource_packs/brindal_grayson_cow_rp/` | Source for Brindal & Grayson custom cows (merged at build) |
+| `behavior_packs/brindal_grayson_cow_bp/` | Behavior definitions for custom cows |
+| `variants/ultimate-chaos-pack/scripts/` | Main build pipeline |
+| `variants/ultimate-chaos-pack/gui_overrides/` | Cow GUI textures/JSON/lang source (applied at build) |
+| `variants/ultimate-chaos-pack/prompts/` | Venice AI texture manifest |
+| `dist/` | Shipped `.mcaddon` / `.mcpack` (committed for one-tap iPad install) |
+
+Build outputs (`pack/`, `behavior_pack/`, `vanilla_src/`) are gitignored. Run `./scripts/clean.sh` to remove them.
+
+## Build
+
+```bash
+pip3 install -r requirements.txt
+./scripts/build-mcaddon.sh
+```
+
+With Venice AI featured textures (optional):
+
+```bash
+export VENICE_API_KEY='your-key'
+./scripts/build-mcaddon.sh
+```
+
+## Custom cow source packs
+
+### Resource pack (`resource_packs/brindal_grayson_cow_rp/`)
+
+| Path | Purpose |
+|------|---------|
+| `entity/` | Client entity definitions (textures, animations) |
 | `textures/entity/` | Cow texture PNG files |
-| `texts/` | Localization strings |
+| `texts/` | Localization |
 
-## Local Development Workflow
+### Behavior pack (`behavior_packs/brindal_grayson_cow_bp/`)
 
-### Option A: Development Folders (Recommended)
+| Path | Purpose |
+|------|---------|
+| `entities/` | AI, health, breeding |
+| `spawn_rules/` | Natural spawn conditions |
+| `texts/` | Localization |
 
-1. Copy or symlink the pack folders into Minecraft's development directories:
+`merge_custom_cows.py` copies these into the built unified pack. **Do not install the source packs alone** — they lack chaos textures, script API, and GUI.
 
-   **Windows:**
-   ```
-   %localappdata%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\development_behavior_packs\brindal_grayson_cow_bp
-   %localappdata%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\development_resource_packs\brindal_grayson_cow_rp
-   ```
-
-   **iPad (with file access):**
-   ```
-   games/com.mojang/development_behavior_packs/brindal_grayson_cow_bp
-   games/com.mojang/development_resource_packs/brindal_grayson_cow_rp
-   ```
-
-2. Create a world with both packs activated
-3. Edit JSON files in your editor
-4. Reload the world (exit and re-enter) to pick up changes
-
-### Option B: Build and Import
-
-1. Edit files in the repository
-2. Run `./scripts/build-mcaddon.sh`
-3. Import the resulting `.mcaddon` into Minecraft
-4. Test in a world with the packs enabled
-
-## Adding a New Cow Variant
+## Adding a new cow variant
 
 1. Create `behavior_packs/.../entities/new_cow.json` with identifier `bgcow:new_cow`
 2. Create `resource_packs/.../entity/new_cow.entity.json`
-3. Add a texture at `resource_packs/.../textures/entity/new_cow.png`
-4. Add spawn rules in `behavior_packs/.../spawn_rules/new_cow.json`
-5. Add localization strings to both `texts/en_US.lang` files
-6. Test with `/summon bgcow:new_cow`
+3. Add texture at `resource_packs/.../textures/entity/new_cow.png`
+4. Add spawn rules and lang strings
+5. Register files in `merge_custom_cows.py` `RP_COPY` / `BP_COPY`
+6. Add `bgcow:new_cow` to `COW_IDENTIFIERS` in `common.py` (exempt from transform)
+7. Rebuild and test: `/summon bgcow:new_cow`
 
-## Ultimate Chaos — layout
-
-See [variants/ultimate-chaos-pack/README.md](../variants/ultimate-chaos-pack/README.md). Build scripts live in `variants/ultimate-chaos-pack/scripts/`. Vanilla assets are cloned to `variants/ultimate-chaos-pack/vanilla_src/` at build time.
-
-```bash
-python3 variants/ultimate-chaos-pack/scripts/build_all.py --rebuild-textures
-python3 variants/ultimate-chaos-pack/scripts/validate_pack.py
-```
-
-## Manifest UUIDs
-
-Each pack has unique UUIDs in its `manifest.json`. The behavior pack's `dependencies` section references the resource pack UUID. **Never change these UUIDs** after a public release — doing so will break existing worlds.
-
-## Useful Commands
+## Build pipeline
 
 ```
-/summon bgcow:brindal_cow          # Spawn Brindal
-/summon bgcow:grayson_cow          # Spawn Grayson
-/kill @e[type=bgcow:brindal_cow]   # Remove all Brindal cows
-/gamerule doMobSpawning true       # Ensure natural spawning is on
+build_cow_pack.py          → clone vanilla, cowify 4600+ textures
+cowify_entity_models.py    → mobs use cow geometry
+cowify_sounds.py           → mob sounds → moo
+cowify_behavior_entities.py → transform on spawn
+personalize_pack.py        → branding, manifests, B/G blocks
+merge_custom_cows.py       → overlay Brindal & Grayson
+cowify_gui.py              → cow-themed UI textures
+apply_gui_overrides.py     → JSON UI, lang, UI sounds
+venice_generate_textures.py → optional AI art (--venice)
+package_mcaddon.py         → dist/
+```
+
+## Local development workflow
+
+### Option A: Development folders
+
+Copy built packs after `./scripts/build-mcaddon.sh`:
+
+```
+variants/ultimate-chaos-pack/pack/          → development_resource_packs/
+variants/ultimate-chaos-pack/behavior_pack/ → development_behavior_packs/
+```
+
+### Option B: Import `.mcaddon`
+
+Rebuild and import `dist/brindal-grayson-cow-pack.mcaddon` into Minecraft.
+
+## UUIDs
+
+See [UUIDS.md](UUIDS.md). **Never change shipped UUIDs** after release.
+
+## Useful commands
+
+```
+/summon bgcow:brindal_cow
+/summon bgcow:grayson_cow
+/bgcow:party
+!moo
 ```
 
 ## References
 
 - [Bedrock Wiki — Pack Structure](https://wiki.bedrock.dev/documentation/pack-structure)
-- [Microsoft Learn — Behavior Packs](https://learn.microsoft.com/en-us/minecraft/creator/documents/behaviorpack)
+- [Bedrock Wiki — JSON UI Best Practices](https://wiki.bedrock.dev/json-ui/best-practices)
 - [Mojang Bedrock Samples](https://github.com/Mojang/bedrock-samples)

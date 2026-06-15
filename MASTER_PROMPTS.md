@@ -1,6 +1,6 @@
 # Master Prompts
 
-Prompts used to build and maintain the Brindal & Grayson Ultimate Cow Pack.
+Prompts used to build and maintain **Brindal & Grayson Cow World**.
 
 ## Initial Project Prompt
 
@@ -17,8 +17,11 @@ Prompts used to build and maintain the Brindal & Grayson Ultimate Cow Pack.
 > 6. Zeros spawn rules for non-cows
 > 7. Replaces entity loot tables with cow loot
 > 8. Personalizes for Brindal & Grayson (pack name, icon, painting, B/G blocks)
-> 9. Packages .mcaddon (full) and .mcpack (visual-only)
-> 10. Validates structure with automated checks
+> 9. Merges custom Brindal & Grayson cows from source packs
+> 10. Applies cow GUI textures + JSON UI/lang/sound overrides (`gui_overrides/`)
+> 11. Optional Venice AI featured textures (`--venice` when `VENICE_API_KEY` set)
+> 12. Packages .mcaddon (full) and .mcpack (visual-only)
+> 13. Validates structure with automated checks
 
 ## CI Prompt
 

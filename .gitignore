@@ -11,6 +11,10 @@ variants/ultimate-chaos-pack/pack/
 variants/ultimate-chaos-pack/behavior_pack/
 build/
 
+# Logs
+*.log
+venice_generation.log
+
 # Python
 __pycache__/
 *.pyc

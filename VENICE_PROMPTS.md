@@ -1,6 +1,6 @@
 # Venice AI Prompts — "Everything Is Cow" Minecraft Skins
 
-Prompts for generating Ultimate Chaos featured textures via [Venice AI](https://venice.ai). Used by `variants/ultimate-chaos-pack/scripts/venice_generate_textures.py`.
+Prompts for generating featured textures for **Brindal & Grayson Cow World** via [Venice AI](https://venice.ai). Used by `variants/ultimate-chaos-pack/scripts/venice_generate_textures.py`.
 
 ## Setup
 

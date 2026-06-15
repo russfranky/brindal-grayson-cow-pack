@@ -1,10 +1,14 @@
-# Ultimate Chaos Build Pipeline
+# Brindal & Grayson Cow World — Build Pipeline
 
-Builds the **unified** Brindal & Grayson Cow World add-on:
+Builds the **unified** add-on shipped as `dist/brindal-grayson-cow-pack.mcaddon`.
+
+## Pipeline
 
 1. Cowify 4600+ textures, mobs, sounds, behavior
 2. Merge Brindal & Grayson custom cows (`merge_custom_cows.py`)
-3. Package → `dist/brindal-grayson-cow-pack.mcaddon`
+3. Cow GUI textures + JSON UI/lang/sounds (`cowify_gui.py`, `apply_gui_overrides.py`)
+4. Optional Venice AI featured textures (`--venice`)
+5. Package → `dist/`
 
 ## Build
 
@@ -12,7 +16,7 @@ Builds the **unified** Brindal & Grayson Cow World add-on:
 # From repo root (recommended)
 ./scripts/build-mcaddon.sh
 
-# Or chaos pipeline only
+# Or pipeline only
 pip3 install -r ../../requirements.txt
 python3 scripts/build_all.py --rebuild-textures
 python3 scripts/validate_pack.py
@@ -29,14 +33,19 @@ python3 scripts/validate_pack.py
 
 ```bash
 export VENICE_API_KEY='your-key'
-python3 scripts/venice_generate_textures.py --category entity
-python3 scripts/build_all.py --rebuild-textures --venice
+./scripts/build-mcaddon.sh   # auto-enables --venice when key is set
 ```
 
 See [VENICE_PROMPTS.md](../../VENICE_PROMPTS.md).
+
+## GUI overrides
+
+Source files live in `gui_overrides/` (not in built `pack/`). Applied at build by `apply_gui_overrides.py`.
 
 ## Resource pack UUID
 
 ```
 d36a0504-4533-4271-b115-a49c53b7bc97
 ```
+
+See [docs/UUIDS.md](../../docs/UUIDS.md).

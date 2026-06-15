@@ -56,48 +56,74 @@ def draw_cow_card(name: str, subtitle: str, summon_id: str, tex: Image.Image, ac
     card.save(out)
 
 
+def draw_sign(draw: ImageDraw.ImageDraw, x: int, y: int, text: str, *, post_h: int = 50) -> None:
+    """Simple wooden sign with text."""
+    draw.rectangle([x + 8, y + post_h - 8, x + 12, y + post_h + 30], fill=(101, 67, 33))
+    draw.rectangle([x, y, x + 120, y + post_h], fill=(139, 90, 43), outline=(80, 50, 20), width=2)
+    for i, line in enumerate(text.split("\n")):
+        draw.text((x + 60, y + 12 + i * 14), line, fill=(255, 255, 220), font=font(11, True), anchor="mm")
+
+
+def draw_mob_silhouette(draw: ImageDraw.ImageDraw, x: int, y: int, kind: str) -> None:
+    """Blocky mob placeholder with cow spots."""
+    colors = {
+        "zombie": (60, 120, 60, 255),
+        "creeper": (80, 120, 60, 255),
+        "skeleton": (220, 220, 200, 255),
+        "spider": (40, 40, 40, 255),
+        "pig": (255, 180, 200, 255),
+    }
+    c = colors.get(kind, (139, 90, 43, 255))
+    draw.rectangle([x + 20, y + 30, x + 60, y + 90], fill=c)
+    draw.ellipse([x + 30, y + 5, x + 70, y + 40], fill=c)
+    for sx, sy in [(x + 25, y + 50), (x + 45, y + 60), (x + 35, y + 75)]:
+        draw.rectangle([sx, sy, sx + 8, sy + 8], fill=(30, 30, 30))
+
+
 def draw_hero(out: Path) -> None:
     w, h = 1200, 500
     hero = Image.new("RGBA", (w, h), (135, 206, 235, 255))
     draw = ImageDraw.Draw(hero)
 
-    # Sky gradient bands
+    # Sunset sky
     for i in range(h // 2):
-        c = int(135 + (200 - 135) * i / (h // 2))
-        draw.line([(0, i), (w, i)], fill=(c, 206, 235))
+        t = i / (h // 2)
+        draw.line([(0, i), (w, i)], fill=(int(255 * t), int(180 + 40 * t), int(100 + 80 * t)))
 
-    # Sun/cowbell
-    draw.ellipse([950, 40, 1080, 170], fill=(255, 215, 0, 255), outline=(200, 160, 0), width=4)
-    draw.rectangle([1005, 100, 1025, 140], fill=(180, 140, 0))
+    # Square sun
+    draw.rectangle([920, 50, 1040, 170], fill=(255, 220, 80), outline=(220, 160, 40), width=3)
 
-    # Hills
-    draw.polygon([(0, 320), (300, 260), (600, 300), (900, 240), (1200, 290), (1200, h), (0, h)], fill=(76, 130, 60))
-    draw.polygon([(0, 360), (400, 310), (800, 350), (1200, 300), (1200, h), (0, h)], fill=(86, 145, 70))
+    # Hills and grass stage
+    draw.polygon([(0, 340), (400, 280), (800, 320), (1200, 290), (1200, h), (0, h)], fill=(76, 130, 60))
+    draw.rectangle([0, 380, w, h], fill=(86, 145, 70))
+    draw.rectangle([100, 360, 1100, 390], fill=(101, 140, 65))  # grass block stage
 
-    brindal = load_tex(RP / "textures/entity/brindal_cow.png", 10)
-    grayson = load_tex(RP / "textures/entity/grayson_cow.png", 10)
-    vanilla = load_tex(BUILT_RP / "textures/entity/cow/cow_v2.png", 6)
+    # Welcome signpost
+    draw.rectangle([60, 300, 68, 380], fill=(101, 67, 33))
+    draw.rectangle([20, 270, 200, 310], fill=(139, 90, 43), outline=(80, 50, 20), width=2)
+    draw.text((110, 290), "Brindal & Grayson's", fill=(255, 255, 220), font=font(12, True), anchor="mm")
+    draw.text((110, 302), "Cow World", fill=(255, 255, 220), font=font(11, True), anchor="mm")
 
-    if brindal:
-        hero.paste(brindal, (180, 240), brindal)
-    if grayson:
-        hero.paste(grayson, (420, 250), grayson)
-    if vanilla:
-        hero.paste(vanilla, (700, 220), vanilla)
-        hero.paste(vanilla, (880, 260), vanilla)
+    # Mob lineup with signs
+    mobs = [
+        (180, "zombie", "MOO?\n(Yes)"),
+        (340, "creeper", "MILK ME"),
+        (500, "skeleton", "We are ALL\ncows now."),
+        (660, "spider", "EAT MORE\nGRASS"),
+        (820, "pig", "I AM COW"),
+    ]
+    for x, kind, sign in mobs:
+        draw_mob_silhouette(draw, x, 250, kind)
+        draw_sign(draw, x, 180, sign)
 
-    # Title banner
-    draw.rounded_rectangle([40, 40, 760, 160], radius=16, fill=(40, 30, 20, 200))
-    draw.text((400, 75), "Brindal & Grayson", fill=(255, 220, 100), font=font(44, True), anchor="mm")
-    draw.text((400, 125), "COW WORLD", fill=(255, 255, 255), font=font(36, True), anchor="mm")
+    # Title
+    draw.text((w // 2, 40), "Brindal & Grayson's", fill=(60, 40, 20), font=font(36, True), anchor="mm")
+    draw.text((w // 2, 85), "Cow World", fill=(40, 25, 10), font=font(52, True), anchor="mm")
 
-    # B & G badges
-    draw.ellipse([60, 380, 110, 430], fill=(93, 219, 213), outline=(255, 255, 255), width=3)
-    draw.text((85, 405), "B", fill=(0, 60, 60), font=font(28, True), anchor="mm")
-    draw.ellipse([110, 380, 160, 430], fill=(249, 198, 40), outline=(255, 255, 255), width=3)
-    draw.text((135, 405), "G", fill=(80, 50, 0), font=font(28, True), anchor="mm")
+    # Footer badge
+    draw.rectangle([w - 320, h - 36, w - 20, h - 10], fill=(30, 30, 30, 200))
+    draw.text((w - 170, h - 23), "MINECRAFT BEDROCK RESOURCE PACK", fill=(220, 220, 220), font=font(12), anchor="mm")
 
-    draw.text((600, 460), "Minecraft Bedrock  •  iPad  •  Everything is cows!", fill=(40, 60, 30), font=font(18), anchor="mm")
     hero.save(out)
 
 

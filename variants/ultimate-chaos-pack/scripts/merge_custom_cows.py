@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Merge Custom Cows (Brindal & Grayson) into the built Ultimate Chaos pack."""
+"""Merge Brindal & Grayson custom cows into the built unified pack."""
 
 from __future__ import annotations
 
 import argparse
 import shutil
+import sys
 from pathlib import Path
 
 from common import PACK_BP, PACK_RP, REPO_ROOT
@@ -52,21 +53,23 @@ def merge_custom_cows() -> None:
             "Custom cow source packs not found in resource_packs/ and behavior_packs/"
         )
     if not PACK_RP.exists() or not PACK_BP.exists():
-        raise FileNotFoundError("Built chaos pack not found — run build steps first")
+        raise FileNotFoundError("Built pack not found — run build steps first")
 
-    for src_rel, dst_rel in RP_COPY:
-        src = CUSTOM_RP / src_rel
-        dst = PACK_RP / dst_rel
-        if src.exists():
-            dst.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(src, dst)
+    missing = []
+    for src_rel, dst_rel in RP_COPY + BP_COPY:
+        src = (CUSTOM_RP if src_rel.startswith(("entity/", "textures/")) else CUSTOM_BP) / src_rel
+        if not src.exists():
+            missing.append(str(src))
+            continue
+        dst = (PACK_RP if dst_rel.startswith(("entity/", "textures/")) else PACK_BP) / dst_rel
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, dst)
 
-    for src_rel, dst_rel in BP_COPY:
-        src = CUSTOM_BP / src_rel
-        dst = PACK_BP / dst_rel
-        if src.exists():
-            dst.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(src, dst)
+    if missing:
+        print("Missing required custom cow files:", file=sys.stderr)
+        for path in missing:
+            print(f"  ✗ {path}", file=sys.stderr)
+        raise SystemExit(1)
 
     merge_lang(CUSTOM_RP / "texts/en_US.lang", PACK_RP / "texts/en_US.lang")
     merge_lang(CUSTOM_BP / "texts/en_US.lang", PACK_BP / "texts/en_US.lang")
@@ -75,8 +78,8 @@ def merge_custom_cows() -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Merge custom cows into chaos pack")
-    args = parser.parse_args()
+    parser = argparse.ArgumentParser(description="Merge custom cows into unified pack")
+    parser.parse_args()
     merge_custom_cows()
 
 

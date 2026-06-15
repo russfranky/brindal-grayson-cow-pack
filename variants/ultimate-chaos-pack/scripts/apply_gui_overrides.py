@@ -19,24 +19,18 @@ COW_SAY_SOUNDS = [
     "sounds/mob/cow/say4",
 ]
 
-COW_HURT_SOUNDS = [
-    {"load_on_low_memory": True, "name": "sounds/mob/cow/hurt1"},
-    "sounds/mob/cow/hurt2",
-    "sounds/mob/cow/hurt3",
-]
-
 
 def merge_json_file(src: Path, dest: Path) -> None:
-  """Shallow-merge top-level keys from src into dest (for UI variable overrides)."""
-  data = load_json(src)
-  dest.parent.mkdir(parents=True, exist_ok=True)
-  if dest.exists():
-    existing = load_json(dest)
-    if isinstance(existing, dict) and isinstance(data, dict):
-      existing.update(data)
-      save_json(dest, existing)
-      return
-  save_json(dest, data)
+    """Shallow-merge top-level keys from src into dest (for UI variable overrides)."""
+    data = load_json(src)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    if dest.exists():
+        existing = load_json(dest)
+        if isinstance(existing, dict) and isinstance(data, dict):
+            existing.update(data)
+            save_json(dest, existing)
+            return
+    save_json(dest, data)
 
 
 def register_ui_defs() -> None:
@@ -104,16 +98,6 @@ def apply_lang_overrides() -> int:
     dest.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
     print(f"  Lang: {len(overrides)} keys in en_US.lang")
     return len(overrides)
-
-
-def _cow_sound_entry(volume: float = 0.35) -> dict:
-    return {
-        "category": "ui",
-        "sounds": [
-            {**s, "volume": volume} if isinstance(s, dict) else s
-            for s in COW_SAY_SOUNDS
-        ],
-    }
 
 
 def apply_sound_overrides() -> int:
