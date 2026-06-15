@@ -66,6 +66,8 @@ def build_all(rebuild_textures: bool = False, skip_package: bool = False, venice
     run_script("personalize_pack.py")
     run_script("merge_custom_cows.py")
     write_script_api()
+    run_script("cowify_gui.py")
+    run_script("apply_gui_overrides.py")
 
     if venice:
         run_script("venice_generate_textures.py", "--all")
