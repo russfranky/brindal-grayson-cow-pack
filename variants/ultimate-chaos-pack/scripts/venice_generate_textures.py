@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate Minecraft textures via Venice AI and apply to the Ultimate Chaos pack.
+Generate Minecraft textures via Venice AI and apply to the unified cow pack.
 
 Workflow:
   1. Generate at 1024×1024 (or configured generate_size) with FLUX / gpt-image-2

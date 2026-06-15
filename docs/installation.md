@@ -6,11 +6,11 @@
 
 ## One download, everything included
 
-**File:** `brindal-grayson-cow-pack.mcaddon` (~81 MB)
+**File:** `brindal-grayson-cow-pack.mcaddon` (~84 MB)
 
 **[Download for iPad](https://github.com/russfranky/brindal-grayson-cow-pack/raw/main/dist/brindal-grayson-cow-pack.mcaddon)**
 
-Includes: cow textures, cow sounds, mob transforms, Brindal & Grayson cows, and 19 fun commands.
+Includes: cow textures, Venice AI mob art, cow GUI, cow sounds, mob transforms, Brindal & Grayson cows, and 19 fun commands.
 
 ---
 

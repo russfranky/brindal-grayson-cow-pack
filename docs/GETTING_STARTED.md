@@ -19,7 +19,7 @@ Kids can spawn cows, throw cow parties, make it rain cows, heal themselves, and 
 
 - An **iPad** with **Minecraft Bedrock Edition** (the normal App Store Minecraft — not Java)
 - Minecraft updated to **version 1.21 or newer**
-- About **5 minutes** and Wi‑Fi to download the pack (~81 MB)
+- About **5 minutes** and Wi‑Fi to download the pack (~84 MB)
 
 ## Install step by step
 

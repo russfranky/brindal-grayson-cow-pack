@@ -1,4 +1,4 @@
-"""Shared utilities for Ultimate Chaos pack build pipeline."""
+"""Shared utilities for Brindal & Grayson Cow World build pipeline."""
 
 from __future__ import annotations
 
