@@ -28,7 +28,7 @@
 
 | | Task | Notes |
 |---|------|-------|
-| ☐ | Run MCTools cooperative add-on validation | **Partial — automated** via [`scripts/validate_mctools.sh`](../scripts/validate_mctools.sh) (optional CI, `continue-on-error`); **41 CADDONREQ failures** on lite build as of 2026-06-18 — see [MCTools](#mctools-manual) |
+| ☐ | Run MCTools cooperative add-on validation | **Partial — automated** via [`scripts/validate_mctools.sh`](../scripts/validate_mctools.sh) (optional CI, `continue-on-error`); **40 CADDONREQ failures** on lite build as of 2026-06-18 — see [MCTools](#mctools-manual) |
 | ☐ | Remove JSON UI screen overrides | **Done** — lang-only branding via `apply_pack_lang.py` |
 | ☐ | Real custom items `bgcow:ranch_bell`, `bgcow:feed_bag` | **Done** — BP items + icons; legacy bell/wheat still recognized |
 | ☐ | Reduce or document Beta APIs + Holiday Creator Features | World template may lock experiments ON |
@@ -120,7 +120,9 @@ Notes:
 - `--offline` skips vanilla web resource fetches (recommended for CI).
 - Invalid: `npx @minecraft/creator-tools validate dist/foo.mcaddon` — treats the path as the suite name.
 
-**Latest automated run (lite `.mcaddon`, v0.17.2):** tool **ran**; exit **4** with **41 errors** — mainly CADDONREQ102/104 (vanilla overlay textures not under `textures/<creatorshortname>/`), CADDONREQ168 (RP manifest missing BP dependency), CADDONIREQ170 (`pack_scope` should be `world`). Expected for kid-download overlay layout; Marketplace submission will need namespace/pack restructuring.
+**Latest automated run (lite `.mcaddon`, v0.17.2):** tool **ran**; exit **4** with **40 errors** — mainly CADDONREQ102/104 (vanilla overlay textures not under `textures/<creatorshortname>/`), CADDONIREQ170 (`pack_scope` should be `world`). **Fixed:** CADDONREQ168 — RP manifest now declares BP dependency via `BP_HEADER_UUID` in `write_rp_manifest()` (`personalize_pack.py`). Expected for kid-download overlay layout; Marketplace submission will need namespace/pack restructuring.
+
+**`pack_scope` (CADDONIREQ170):** not set on the lite `.mcaddon` RP manifest — cooperative add-ons are world-agnostic overlays. `header.pack_scope: world` belongs on the **world template** scaffold ([`worlds/brindal_grayson_ranch/`](../worlds/brindal_grayson_ranch/)) when that SKU ships, not on the kid-download `.mcaddon`.
 
 **Manual fallback:**
 
@@ -155,6 +157,7 @@ We rely on `validate_marketplace.py` + iPad playtests for day-to-day CI gates; M
 | 2026-06-18 | Phase 4: experiment matrix in TESTING.md; MCTools note; marketplace validator checks Beta APIs + cow UI |
 | 2026-06-18 | Phase 1: Script API stability audit — [MARKETPLACE_SCRIPT_API.md](MARKETPLACE_SCRIPT_API.md); V2 2.0.0 + custom commands require Beta APIs |
 | 2026-06-18 | Phase 1: MCTools CLI wired — `scripts/validate_mctools.sh`; optional CI step; 41 CADDONREQ failures on lite build |
+| 2026-06-18 | Phase 1: CADDONREQ168 fixed — RP→BP manifest dependency in `write_rp_manifest()`; MCTools lite `.mcaddon` **40 errors** (was 41) |
 | 2026-06-18 | Phase 5 scaffold: [`marketing/`](../marketing/) — store copy draft, screenshot checklist, procedural key art stub |
 
 ---
