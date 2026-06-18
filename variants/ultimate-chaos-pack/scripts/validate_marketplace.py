@@ -22,6 +22,19 @@ CUSTOM_ITEMS = (
 def validate() -> list[str]:
     errors: list[str] = []
 
+    bp_manifest = PACK_BP / "manifest.json"
+    if bp_manifest.exists():
+        description = load_json(bp_manifest).get("header", {}).get("description", "")
+        if "beta api" not in description.lower():
+            errors.append("BP manifest description must mention Beta APIs")
+    else:
+        errors.append("Missing behavior_pack/manifest.json")
+
+    ui_dir = PACK_RP / "ui"
+    if ui_dir.is_dir():
+        for path in sorted(ui_dir.glob("cow*.json")):
+            errors.append(f"JSON UI override present: ui/{path.name}")
+
     for rel in COW_UI_DEFS:
         if (PACK_RP / rel).exists():
             errors.append(f"JSON UI override present: {rel}")

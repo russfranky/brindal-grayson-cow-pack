@@ -2,7 +2,7 @@
 
 **Product:** Brindal & Grayson Cow Ranch — world template / cooperative add-on  
 **Status:** In progress — keep this file updated until we ship or abandon Marketplace  
-**Last updated:** 2026-06-15 (autoresearch loop 7)
+**Last updated:** 2026-06-18 (Phase 4 experiment matrix)
 
 ---
 
@@ -28,7 +28,7 @@
 
 | | Task | Notes |
 |---|------|-------|
-| ☐ | Run MCTools cooperative add-on validation | No errors on submission set |
+| ☐ | Run MCTools cooperative add-on validation | See [MCTools (manual)](#mctools-manual) below — not automated in CI yet |
 | ☐ | Remove JSON UI screen overrides | **Done** — lang-only branding via `apply_pack_lang.py` |
 | ☐ | Real custom items `bgcow:ranch_bell`, `bgcow:feed_bag` | **Done** — BP items + icons; legacy bell/wheat still recognized |
 | ☐ | Reduce or document Beta APIs + Holiday Creator Features | World template may lock experiments ON |
@@ -69,7 +69,7 @@
 | ☐ | iPad Bedrock (primary) | User playtest |
 | ☐ | Android / Windows Bedrock | Secondary |
 | ☐ | Target engine: 1.21+ | `min_engine_version` in manifests |
-| ☐ | New world + experiments ON/OFF matrix | Document in TESTING.md |
+| ☑ | New world + experiments ON/OFF matrix | **Done** — [TESTING.md § Experiment matrix](../TESTING.md#experiment-matrix-new-world) |
 | ☐ | `.mcaddon` size under store guidance | ~217 KB lite build |
 | ☐ | `validate_pack.py` + `simulate_barn.py` green in CI | Automated gate + `validate_marketplace.py` in `.auto/checks.sh` |
 
@@ -96,6 +96,19 @@
 
 ---
 
+## MCTools (manual)
+
+**Minecraft Creator Tools** ([Learn overview](https://learn.microsoft.com/en-us/minecraft/creator/documents/mctoolsoverview?view=minecraft-bedrock-stable)) is Microsoft's validator for cooperative add-ons and Marketplace sharing rules (CADDONREQ, sharing suite). It checks manifest linkage, forbidden UI overrides, loose files, namespaces, and flags experimental capabilities (Beta APIs, Holiday Creator Features).
+
+**How a publisher would run it (not automated in this repo yet):**
+
+1. **Web:** Zip the submission set (or upload `.mcaddon`) at [mctools.dev](https://mctools.dev) → **Inspector** → rule suite **Coop Add-On Requirements** (and **Sharing** before store upload). Processing stays in the browser.
+2. **CLI:** `npx @minecraft/creator-tools validate /path/to/project` (or point at the built `.mcaddon`). Requires Node.js; first run downloads the tool.
+
+We rely on `validate_marketplace.py` + iPad playtests for day-to-day CI; run MCTools once before partner submission to catch rules our lightweight script does not cover.
+
+---
+
 ## Current blockers (living list)
 
 1. **Beta APIs** — Cow Barn still requires Script API experimental toggle for new worlds.
@@ -112,6 +125,7 @@
 |------|--------|
 | 2026-06-15 | Phase 1 start: `bgcow:ranch_bell` / `bgcow:feed_bag`, removed JSON UI from build, `apply_pack_lang.py` |
 | 2026-06-15 | Autoresearch exp 7: baked stone + chest textures; `validate_marketplace.py` in checks loop |
+| 2026-06-18 | Phase 4: experiment matrix in TESTING.md; MCTools note; marketplace validator checks Beta APIs + cow UI |
 
 ---
 
