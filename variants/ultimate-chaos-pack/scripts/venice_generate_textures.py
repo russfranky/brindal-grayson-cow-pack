@@ -32,10 +32,19 @@ from venice_client import VeniceError, generate_image, save_png
 
 PROMPTS_FILE = VARIANT_ROOT / "prompts" / "venice_prompts.json"
 CACHE_DIR = VARIANT_ROOT / "venice_cache"
-STYLE_SUFFIX = (
-    " Flat pixel art, hard edges, no anti-aliasing, no gradients, "
-    "solid color blocks, Minecraft style."
+FALLBACK_STYLE_SUFFIX = (
+    " Cel-shaded toon pixel art: flat luminance bands, thick ink outlines, "
+    "no gradients, no dithering, hard edges, Minecraft style."
 )
+
+
+def style_suffix(manifest: dict) -> str:
+    base = manifest.get("style_suffix", "").strip()
+    if not base:
+        return FALLBACK_STYLE_SUFFIX
+    if not base.startswith(" "):
+        base = " " + base
+    return base
 
 
 def load_manifest() -> dict:
@@ -78,7 +87,7 @@ def generate_texture(entry: dict, manifest: dict, *, dry_run: bool = False, forc
             apply_to_pack(img, extra)
         return True
 
-    prompt = entry["prompt"] + STYLE_SUFFIX
+    prompt = entry["prompt"] + style_suffix(manifest)
     model = entry.get("model", "flux-dev")
     gen_size = entry["generate_size"]
 
@@ -131,7 +140,7 @@ def generate_style_anchor(manifest: dict, *, dry_run: bool = False) -> bool:
     print("[anchor] Generating style reference image...")
     try:
         raw = generate_image(
-            anchor["prompt"] + STYLE_SUFFIX,
+            anchor["prompt"] + style_suffix(manifest),
             model=anchor.get("model", "flux-2-pro"),
             width=anchor.get("generate_size", 1024),
             height=anchor.get("generate_size", 1024),

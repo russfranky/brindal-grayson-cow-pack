@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import shutil
 import subprocess
 import sys
@@ -13,14 +14,31 @@ from env_loader import init_env
 
 SCRIPTS = VARIANT_ROOT / "scripts"
 
-# Venice categories for lite overlay (no panoramas — large cubemap slows title screen).
+# Lite overlay Venice pass (no panoramas — large cubemap slows title screen).
 VENICE_CATEGORIES = ("block", "item", "environment")
+VENICE_CUSTOM_IDS = "brindal_cow,grayson_cow,ranch_bell,feed_bag"
 
 
 def run_script(name: str, *args: str) -> None:
     cmd = [sys.executable, str(SCRIPTS / name), *args]
     print(f"\n{'='*60}\n>>> {' '.join(cmd)}\n{'='*60}")
     subprocess.check_call(cmd, cwd=SCRIPTS)
+
+
+def venice_key_set() -> bool:
+    return bool(os.environ.get("VENICE_API_KEY") or os.environ.get("VENICE_INFERENCE_KEY"))
+
+
+def run_venice_cel_facelift(*, force: bool = False) -> bool:
+    """Generate lite-pack textures via Venice AI, then cel-bake in finalize_texture."""
+    if not venice_key_set():
+        print("Venice API key not set — skip AI cel facelift (export VENICE_API_KEY)")
+        return False
+    flag = ["--force"] if force else []
+    for category in VENICE_CATEGORIES:
+        run_script("venice_generate_textures.py", "--category", category, *flag)
+    run_script("venice_generate_textures.py", "--id", VENICE_CUSTOM_IDS, *flag)
+    return True
 
 
 def ensure_vanilla_src() -> None:
@@ -57,31 +75,43 @@ def build_all(
     skip_package: bool = False,
     venice: bool = False,
     venice_audio: bool = False,
+    venice_force: bool = False,
+    procedural_fallback: bool = False,
 ) -> None:
     ensure_vanilla_src()
+    init_env()
 
     if rebuild_textures:
         for d in (PACK_RP, PACK_BP):
             if d.exists():
                 shutil.rmtree(d)
 
-    # Lite overlay: only featured textures + custom cows (not 15k vanilla files).
+    use_venice = venice or venice_key_set()
+
+    # Lite overlay: featured textures + custom cows (not full vanilla copy).
     run_script("prepare_lite_pack.py")
-    run_script("polish_textures.py", "--sources")
     run_script("personalize_pack.py")
-    run_script("cowify_kid_textures.py")
-    if venice_audio:
-        run_script("venice_generate_audio.py", "--batch", "1")
     run_script("merge_custom_cows.py")
     write_script_api()
     run_script("apply_pack_lang.py")
     run_script("apply_audio_overrides.py", "--lite")
     run_script("optimize_audio.py")
-    if venice:
-        for category in VENICE_CATEGORIES:
-            run_script("venice_generate_textures.py", "--category", category)
 
+    if venice_audio:
+        run_script("venice_generate_audio.py", "--batch", "1")
+
+    if use_venice:
+        run_venice_cel_facelift(force=venice_force)
+    elif procedural_fallback or os.environ.get("COWIFY_PROCEDURAL") == "1":
+        print("No Venice key — optional procedural overlay (COWIFY_PROCEDURAL=1)")
+        run_script("cowify_kid_textures.py")
+    else:
+        print("Texture path: vanilla lite staging + cel polish (set VENICE_API_KEY for AI facelift)")
+
+    # Cel bake on all pack PNGs (including Venice output).
+    run_script("polish_textures.py", "--sources")
     run_script("polish_textures.py")
+
     if not skip_package:
         run_script("optimize_pngs.py")
         run_script("package_mcpack.py")
@@ -97,13 +127,22 @@ def main() -> None:
     parser.add_argument("--skip-package", action="store_true",
                         help="Skip packaging .mcpack/.mcaddon")
     parser.add_argument("--venice", action="store_true",
-                        help="Generate featured textures via Venice AI (requires VENICE_API_KEY)")
+                        help="Venice AI cel facelift (auto when VENICE_API_KEY is set)")
+    parser.add_argument("--venice-force", action="store_true",
+                        help="Regenerate Venice textures even if cached")
     parser.add_argument("--venice-audio", action="store_true",
                         help="Generate batch-1 audio via Venice AI (requires VENICE_API_KEY)")
+    parser.add_argument("--procedural-fallback", action="store_true",
+                        help="Use legacy procedural overlays when Venice key missing")
     args = parser.parse_args()
-    init_env()
-    build_all(rebuild_textures=args.rebuild_textures, skip_package=args.skip_package,
-              venice=args.venice, venice_audio=args.venice_audio)
+    build_all(
+        rebuild_textures=args.rebuild_textures,
+        skip_package=args.skip_package,
+        venice=args.venice,
+        venice_audio=args.venice_audio,
+        venice_force=args.venice_force,
+        procedural_fallback=args.procedural_fallback,
+    )
 
 
 if __name__ == "__main__":

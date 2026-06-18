@@ -22,13 +22,11 @@ if [[ -f "$ROOT/requirements.txt" ]]; then
 fi
 
 VENICE_FLAG=""
-if [[ "${VENICE_TEXTURES:-}" == "1" ]]; then
-  if [[ -n "${VENICE_API_KEY:-}" || -n "${VENICE_INFERENCE_KEY:-}" ]]; then
-    echo "VENICE_TEXTURES=1: generating featured AI textures"
-    VENICE_FLAG="--venice"
-  else
-    echo "Warning: VENICE_TEXTURES=1 but no API key set — skipping texture generation" >&2
-  fi
+if [[ -n "${VENICE_API_KEY:-}" || -n "${VENICE_INFERENCE_KEY:-}" ]]; then
+  echo "VENICE_API_KEY set — running Venice cel facelift on lite textures"
+  VENICE_FLAG="--venice --venice-force"
+elif [[ "${VENICE_TEXTURES:-}" == "1" ]]; then
+  echo "Warning: VENICE_TEXTURES=1 but no API key — vanilla + cel polish only" >&2
 fi
 
 VENICE_AUDIO_FLAG=""
