@@ -298,6 +298,97 @@ def cowify_netherrack(path: Path) -> None:
     img.save(path, optimize=True)
 
 
+TNT_RED = (180, 50, 50)
+TNT_RED_DARK = (130, 35, 35)
+TNT_WHITE = (245, 245, 245)
+
+
+def _tnt_red_base(draw: ImageDraw.ImageDraw, *, seed: int) -> None:
+    random.seed(seed)
+    for y in range(16):
+        for x in range(16):
+            shade = TNT_RED_DARK if (x + y) % 5 == 0 else TNT_RED
+            draw.point((x, y), fill=shade)
+
+
+def _tnt_cow_spots(draw: ImageDraw.ImageDraw, *, seed: int, skip_box: tuple[int, int, int, int] | None = None) -> None:
+    random.seed(seed)
+    for _ in range(4):
+        x, y = random.randint(0, 12), random.randint(0, 12)
+        if skip_box and skip_box[0] <= x <= skip_box[2] and skip_box[1] <= y <= skip_box[3]:
+            continue
+        _spot(draw, x, y, 2, 2, SPOT)
+    for _ in range(2):
+        x, y = random.randint(0, 12), random.randint(0, 12)
+        if skip_box and skip_box[0] <= x <= skip_box[2] and skip_box[1] <= y <= skip_box[3]:
+            continue
+        _spot(draw, x, y, 2, 2, CREAM)
+
+
+def _draw_moo_label(draw: ImageDraw.ImageDraw) -> None:
+    """Blocky white MOO on the red TNT side (kid-readable at 16px)."""
+    white = TNT_WHITE
+    # M
+    for y in range(6, 10):
+        draw.point((3, y), fill=white)
+        draw.point((7, y), fill=white)
+    draw.point((4, 6), fill=white)
+    draw.point((5, 7), fill=white)
+    draw.point((6, 6), fill=white)
+    # O
+    for y in range(6, 10):
+        draw.point((9, y), fill=white)
+        draw.point((12, y), fill=white)
+    for x in range(9, 13):
+        draw.point((x, 6), fill=white)
+        draw.point((x, 9), fill=white)
+
+
+def cowify_tnt_side(path: Path) -> None:
+    if not path.exists():
+        return
+    img = Image.new("RGBA", (16, 16), TNT_RED)
+    draw = ImageDraw.Draw(img)
+    _tnt_red_base(draw, seed=51)
+    draw.line([(0, 4), (15, 4)], fill=TNT_RED_DARK)
+    draw.line([(0, 11), (15, 11)], fill=TNT_RED_DARK)
+    draw.rectangle([2, 5, 13, 10], fill=TNT_WHITE)
+    _draw_moo_label(draw)
+    _tnt_cow_spots(draw, seed=53, skip_box=(2, 5, 13, 10))
+    img.save(path, optimize=True)
+
+
+def cowify_tnt_top(path: Path) -> None:
+    if not path.exists():
+        return
+    img = Image.new("RGBA", (16, 16), TNT_RED)
+    draw = ImageDraw.Draw(img)
+    _tnt_red_base(draw, seed=55)
+    _tnt_cow_spots(draw, seed=57)
+    # cartoon cow tail fuse
+    draw.line([(8, 3), (8, 1)], fill=BROWN, width=1)
+    draw.point((7, 1), fill=CREAM)
+    draw.point((9, 1), fill=CREAM)
+    draw.point((8, 0), fill=SPOT)
+    draw.point((8, 4), fill=(60, 40, 10))
+    img.save(path, optimize=True)
+
+
+def cowify_tnt_bottom(path: Path) -> None:
+    if not path.exists():
+        return
+    img = Image.new("RGBA", (16, 16), TNT_RED)
+    draw = ImageDraw.Draw(img)
+    _tnt_red_base(draw, seed=59)
+    _tnt_cow_spots(draw, seed=61)
+    # vanilla-style dark cross on bottom
+    draw.line([(0, 7), (15, 7)], fill=TNT_RED_DARK)
+    draw.line([(7, 0), (7, 15)], fill=TNT_RED_DARK)
+    for cx, cy in ((4, 4), (11, 4), (4, 11), (11, 11)):
+        draw.ellipse([cx, cy, cx + 2, cy + 2], fill=TNT_RED_DARK)
+    img.save(path, optimize=True)
+
+
 def cowify_furnace_front(path: Path, *, lit: bool = False) -> None:
     if not path.exists():
         return
@@ -338,6 +429,9 @@ def apply_kid_textures(pack_rp: Path = PACK_RP, *, refresh_baked: bool = False) 
         ("textures/blocks/netherrack.png", cowify_netherrack),
         ("textures/blocks/furnace_front_off.png", lambda p: cowify_furnace_front(p, lit=False)),
         ("textures/blocks/furnace_front_on.png", lambda p: cowify_furnace_front(p, lit=True)),
+        ("textures/blocks/tnt_side.png", cowify_tnt_side),
+        ("textures/blocks/tnt_top.png", cowify_tnt_top),
+        ("textures/blocks/tnt_bottom.png", cowify_tnt_bottom),
     ]
     for rel, fn in jobs:
         path = pack_rp / rel

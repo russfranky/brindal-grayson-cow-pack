@@ -120,6 +120,12 @@ python3 scripts/autoresearch/summarize.py
 - Baked cache committed for CI (no Venice API)
 - **Result: mcaddon_kb≈218.46** (+0.19 KB vs baseline), texture_count=36, all checks pass
 
+### Experiment 11 — KEEP (TNT kid textures)
+
+- `cowify_kid_textures.py`: baked `tnt_side.png` (red MOO label + cow spots), `tnt_top.png` (cow-tail fuse), `tnt_bottom.png` (cow-spot red + dark cross)
+- Baked cache committed for CI (no Venice API)
+- **Result: mcaddon_kb≈214.44** (−0.02 KB vs pre-exp baseline), texture_count=36, all checks pass
+
 ### Marketplace polish (PR #29, parallel track)
 
 - `docs/MARKETPLACE.md` living checklist
@@ -127,7 +133,6 @@ python3 scripts/autoresearch/summarize.py
 
 ### Next ideas (backlog)
 
-- Baked kid textures for lite-pack blocks NOT yet cowified: `tnt_top`, `tnt_side`, `tnt_bottom` in `cowify_kid_textures.py`
 - Hubzz-3d-pipeline stage alignment when repo is accessible
 - World template stub with experiments locked ON (Marketplace Phase 3)
 - MCTools cooperative add-on validation run

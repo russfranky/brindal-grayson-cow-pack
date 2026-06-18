@@ -42,7 +42,7 @@
 
 | | Task | Notes |
 |---|------|-------|
-| ☐ | Professional texture pass (blocks, items, cows, icon) | Baked procedural art — stone, chest, cobble, grass, coal/iron/gold/diamond/emerald ore, netherrack, furnace added |
+| ☐ | Professional texture pass (blocks, items, cows, icon) | Baked procedural art — stone, chest, cobble, grass, coal/iron/gold/diamond/emerald ore, netherrack, furnace, TNT (MOO + cow-tail fuse) added |
 | ☐ | Visible in-world traits (horns, marks) on custom cows | **Partial** — deploy name tags (⌇/★/◆), size scale, gold-horn glow + deploy particles; texture art still TBD |
 | ☐ | Menu music + SFX review (length, loudness, loop) | Trimmed lite menu track shipped |
 | ☐ | Marketing key art (store tile, panorama optional) | 512+ store assets |
