@@ -2,7 +2,7 @@
 
 **Product:** Brindal & Grayson Cow Ranch — world template / cooperative add-on  
 **Status:** In progress — keep this file updated until we ship or abandon Marketplace  
-**Last updated:** 2026-06-18 (Phase 3 world scaffold + Phase 4 experiment matrix)
+**Last updated:** 2026-06-18 (Phase 1 Script API audit)
 
 ---
 
@@ -32,7 +32,7 @@
 | ☐ | Remove JSON UI screen overrides | **Done** — lang-only branding via `apply_pack_lang.py` |
 | ☐ | Real custom items `bgcow:ranch_bell`, `bgcow:feed_bag` | **Done** — BP items + icons; legacy bell/wheat still recognized |
 | ☐ | Reduce or document Beta APIs + Holiday Creator Features | World template may lock experiments ON |
-| ☐ | Script API uses stable `@minecraft/server` 2.x patterns | Audit before submission |
+| ☑ | Script API uses stable `@minecraft/server` 2.x patterns | **Audited** — [MARKETPLACE_SCRIPT_API.md](MARKETPLACE_SCRIPT_API.md); not **Done** until Beta dependency removed or world template locks experiments |
 | ☐ | No disallowed vanilla overrides (UI, core screens, click sounds) | **Done** — lang-only branding; no UI JSON or click-sound swaps in build |
 | ☐ | Pack UUIDs / versioning policy for store updates | Document in release notes |
 
@@ -42,8 +42,8 @@
 
 | | Task | Notes |
 |---|------|-------|
-| ☐ | Professional texture pass (blocks, items, cows, icon) | Baked procedural art — stone, chest, cobble, grass, coal/iron ore added |
-| ☐ | Visible in-world traits (horns, marks) on custom cows | Partially done |
+| ☐ | Professional texture pass (blocks, items, cows, icon) | Baked procedural art — stone, chest, cobble, grass, coal/iron ore, netherrack, furnace added |
+| ☐ | Visible in-world traits (horns, marks) on custom cows | **Partial** — deploy name tags (⌇/★/◆), size scale, gold-horn glow + deploy particles; texture art still TBD |
 | ☐ | Menu music + SFX review (length, loudness, loop) | Trimmed lite menu track shipped |
 | ☐ | Marketing key art (store tile, panorama optional) | 512+ store assets |
 | ☐ | No third-party / Venice-only assets without license trail | Audit `prompts/` usage |
@@ -126,8 +126,11 @@ We rely on `validate_marketplace.py` + iPad playtests for day-to-day CI; run MCT
 | 2026-06-15 | Phase 1 start: `bgcow:ranch_bell` / `bgcow:feed_bag`, removed JSON UI from build, `apply_pack_lang.py` |
 | 2026-06-15 | Autoresearch exp 7: baked stone + chest textures; `validate_marketplace.py` in checks loop |
 | 2026-06-18 | Autoresearch exp 8: baked coal_ore + iron_ore kid textures (cow-spot ore blocks) |
+| 2026-06-18 | Autoresearch exp 9: baked netherrack + furnace_front off/on kid textures (cow-spot nether + lit nose) |
 | 2026-06-18 | Phase 3 scaffold: `worlds/brindal_grayson_ranch/` (README, WORLD_CHECKLIST, manifest stub, experiments reference); `validate_world_scaffold.py` in checks |
+| 2026-06-18 | Phase 2 traits: deploy name tags + scale + gold-horn glow/particles on custom cows (`always_show` nameable) |
 | 2026-06-18 | Phase 4: experiment matrix in TESTING.md; MCTools note; marketplace validator checks Beta APIs + cow UI |
+| 2026-06-18 | Phase 1: Script API stability audit — [MARKETPLACE_SCRIPT_API.md](MARKETPLACE_SCRIPT_API.md); V2 2.0.0 + custom commands require Beta APIs |
 
 ---
 

@@ -214,6 +214,50 @@ def cowify_iron_ore(path: Path) -> None:
     img.save(path, optimize=True)
 
 
+NETHERRACK = (112, 54, 54)
+NETHERRACK_DARK = (85, 38, 38)
+FURNACE_STONE = (115, 115, 115)
+FURNACE_DARK = (75, 75, 75)
+FURNACE_GLOW = (255, 120, 40)
+
+
+def cowify_netherrack(path: Path) -> None:
+    if not path.exists():
+        return
+    img = Image.new("RGBA", (16, 16), NETHERRACK)
+    draw = ImageDraw.Draw(img)
+    random.seed(31)
+    for y in range(16):
+        for x in range(16):
+            shade = NETHERRACK_DARK if (x + y) % 4 == 0 else NETHERRACK
+            draw.point((x, y), fill=shade)
+    for _ in range(5):
+        _spot(draw, random.randint(0, 11), random.randint(0, 11), 3, 3, SPOT)
+    for _ in range(2):
+        _spot(draw, random.randint(0, 12), random.randint(0, 12), 2, 2, CREAM)
+    img.save(path, optimize=True)
+
+
+def cowify_furnace_front(path: Path, *, lit: bool = False) -> None:
+    if not path.exists():
+        return
+    img = Image.new("RGBA", (16, 16), FURNACE_STONE)
+    draw = ImageDraw.Draw(img)
+    random.seed(37 if lit else 35)
+    for y in range(16):
+        for x in range(16):
+            shade = 105 + ((x * 2 + y) % 4) * 8
+            draw.point((x, y), fill=(shade, shade, shade))
+    # cow-nose opening (dark oval)
+    draw.ellipse([5, 6, 11, 12], fill=FURNACE_DARK if not lit else (40, 20, 10))
+    if lit:
+        draw.ellipse([6, 7, 10, 11], fill=FURNACE_GLOW)
+        draw.point((8, 9), fill=(255, 200, 80))
+    _spot(draw, 2, 2, 2, 2, CREAM)
+    _spot(draw, 12, 13, 2, 2)
+    img.save(path, optimize=True)
+
+
 def apply_kid_textures(pack_rp: Path = PACK_RP, *, refresh_baked: bool = False) -> int:
     count = 0
     jobs: list[tuple[str, object]] = [
@@ -228,6 +272,9 @@ def apply_kid_textures(pack_rp: Path = PACK_RP, *, refresh_baked: bool = False) 
         ("textures/blocks/chest_front.png", cowify_chest_front),
         ("textures/blocks/coal_ore.png", cowify_coal_ore),
         ("textures/blocks/iron_ore.png", cowify_iron_ore),
+        ("textures/blocks/netherrack.png", cowify_netherrack),
+        ("textures/blocks/furnace_front_off.png", lambda p: cowify_furnace_front(p, lit=False)),
+        ("textures/blocks/furnace_front_on.png", lambda p: cowify_furnace_front(p, lit=True)),
     ]
     for rel, fn in jobs:
         path = pack_rp / rel

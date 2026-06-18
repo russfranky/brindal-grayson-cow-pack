@@ -108,6 +108,12 @@ python3 scripts/autoresearch/summarize.py
 - Baked cache committed for CI (no Venice API)
 - **Result: mcaddon_kb≈218.01** (+0.26 KB vs exp 7), texture_count=36, all checks pass
 
+### Experiment 9 — KEEP (netherrack + furnace kid textures)
+
+- `cowify_kid_textures.py`: baked `netherrack.png` (dark red + black cow spots) + `furnace_front_off/on.png` (stone face, cow-nose opening, lit glow on on)
+- Baked cache committed for CI (no Venice API)
+- **Result: mcaddon_kb≈217.94** (−0.07 KB vs exp 8), texture_count=36, all checks pass
+
 ### Marketplace polish (PR #29, parallel track)
 
 - `docs/MARKETPLACE.md` living checklist
