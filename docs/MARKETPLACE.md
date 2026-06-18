@@ -79,8 +79,9 @@
 
 | | Task | Notes |
 |---|------|-------|
-| ☐ | English store description + changelog | |
-| ☐ | Screenshots (gameplay, barn menu, cows) | Min 3–5 |
+| ☑ | Marketing asset scaffold | [`marketing/`](../marketing/) — README, [`STORE_COPY.md`](../marketing/STORE_COPY.md), [`SCREENSHOT_CHECKLIST.md`](../marketing/SCREENSHOT_CHECKLIST.md), key art stub |
+| ☐ | English store description + changelog | Draft in [`marketing/STORE_COPY.md`](../marketing/STORE_COPY.md) — paste into partner portal |
+| ☐ | Screenshots (gameplay, barn menu, cows) | Min 3–5 — checklist in [`marketing/SCREENSHOT_CHECKLIST.md`](../marketing/SCREENSHOT_CHECKLIST.md); iPad capture still open |
 | ☐ | Trailer or animated GIF (optional) | |
 | ☐ | Localization plan (ES, FR, …) | English-only today |
 | ☐ | Age rating / content flags | Kid-friendly ranch sim |
@@ -131,6 +132,7 @@ We rely on `validate_marketplace.py` + iPad playtests for day-to-day CI; run MCT
 | 2026-06-18 | Phase 2 traits: deploy name tags + scale + gold-horn glow/particles on custom cows (`always_show` nameable) |
 | 2026-06-18 | Phase 4: experiment matrix in TESTING.md; MCTools note; marketplace validator checks Beta APIs + cow UI |
 | 2026-06-18 | Phase 1: Script API stability audit — [MARKETPLACE_SCRIPT_API.md](MARKETPLACE_SCRIPT_API.md); V2 2.0.0 + custom commands require Beta APIs |
+| 2026-06-18 | Phase 5 scaffold: [`marketing/`](../marketing/) — store copy draft, screenshot checklist, procedural key art stub |
 
 ---
 
@@ -142,3 +144,4 @@ We rely on `validate_marketplace.py` + iPad playtests for day-to-day CI; run MCT
 - [docs/mob-index/MOB_INDEX.md](mob-index/MOB_INDEX.md) — mob approvals
 - [development.md](development.md) — build pipeline
 - [worlds/brindal_grayson_ranch/](../worlds/brindal_grayson_ranch/) — Marketplace world template scaffold (Phase 3)
+- [marketing/](../marketing/) — store marketing asset scaffold (Phase 5)
