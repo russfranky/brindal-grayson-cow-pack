@@ -91,8 +91,13 @@ python3 scripts/autoresearch/summarize.py
 - Removed empty `item_texture.json` overlay (vanilla atlas merge)
 - **Result: mcaddon_kb≈218**, texture_count=36
 
+### Experiment 6 — KEEP (more baked blocks)
+
+- Cow-spot cobblestone + crafting table top in `baked_textures/`
+- mcaddon_kb stable ~217.5
+
 ### Next ideas (backlog)
 
 - Hubzz-3d-pipeline stage alignment when repo is accessible
-- More baked block textures (cobblestone, crafting table) without API
+- More baked block textures (stone, chest) without API
 - Further music trim (shorter loop) if parents want sub-350 KB
