@@ -172,6 +172,48 @@ def cowify_chest_front(path: Path) -> None:
     img.save(path, optimize=True)
 
 
+STONE_GRAY = (125, 125, 125)
+STONE_LIGHT = (200, 200, 200)
+COAL = (25, 25, 25)
+IRON = (190, 160, 110)
+
+
+def cowify_coal_ore(path: Path) -> None:
+    if not path.exists():
+        return
+    img = Image.new("RGBA", (16, 16), STONE_GRAY)
+    draw = ImageDraw.Draw(img)
+    random.seed(23)
+    for y in range(16):
+        for x in range(16):
+            shade = 115 + ((x + y * 2) % 5) * 6
+            draw.point((x, y), fill=(shade, shade, shade))
+    for _ in range(4):
+        _spot(draw, random.randint(0, 11), random.randint(0, 11), 3, 3, STONE_LIGHT)
+    for _ in range(5):
+        _spot(draw, random.randint(0, 12), random.randint(0, 12), 2, 2, COAL)
+    img.save(path, optimize=True)
+
+
+def cowify_iron_ore(path: Path) -> None:
+    if not path.exists():
+        return
+    img = Image.new("RGBA", (16, 16), STONE_GRAY)
+    draw = ImageDraw.Draw(img)
+    random.seed(29)
+    for y in range(16):
+        for x in range(16):
+            shade = 115 + ((x + y * 2) % 5) * 6
+            draw.point((x, y), fill=(shade, shade, shade))
+    for _ in range(3):
+        _spot(draw, random.randint(0, 11), random.randint(0, 11), 3, 3, SPOT)
+    for _ in range(2):
+        _spot(draw, random.randint(0, 11), random.randint(0, 11), 3, 3, CREAM)
+    for _ in range(6):
+        _spot(draw, random.randint(0, 13), random.randint(0, 13), 1, 1, IRON)
+    img.save(path, optimize=True)
+
+
 def apply_kid_textures(pack_rp: Path = PACK_RP, *, refresh_baked: bool = False) -> int:
     count = 0
     jobs: list[tuple[str, object]] = [
@@ -184,6 +226,8 @@ def apply_kid_textures(pack_rp: Path = PACK_RP, *, refresh_baked: bool = False) 
         ("textures/blocks/crafting_table_top.png", cowify_crafting_table),
         ("textures/blocks/stone.png", cowify_stone),
         ("textures/blocks/chest_front.png", cowify_chest_front),
+        ("textures/blocks/coal_ore.png", cowify_coal_ore),
+        ("textures/blocks/iron_ore.png", cowify_iron_ore),
     ]
     for rel, fn in jobs:
         path = pack_rp / rel

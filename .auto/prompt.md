@@ -102,6 +102,12 @@ python3 scripts/autoresearch/summarize.py
 - `validate_marketplace.py` wired into `.auto/checks.sh` (no JSON UI, custom items, script refs)
 - **Result: mcaddon_kb≈217.75**, texture_count=36, marketplace compliance pass
 
+### Experiment 8 — KEEP (coal + iron ore baked blocks)
+
+- `cowify_kid_textures.py`: procedural `coal_ore.png` (Holstein light spots + black coal flecks) + `iron_ore.png` (cow-spot stone + tan iron flecks)
+- Baked cache committed for CI (no Venice API)
+- **Result: mcaddon_kb≈218.01** (+0.26 KB vs exp 7), texture_count=36, all checks pass
+
 ### Marketplace polish (PR #29, parallel track)
 
 - `docs/MARKETPLACE.md` living checklist
