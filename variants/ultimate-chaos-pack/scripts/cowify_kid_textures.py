@@ -106,6 +106,35 @@ def draw_ranch_bell(path: Path) -> None:
     img.save(path, optimize=True)
 
 
+def cowify_cobblestone(path: Path) -> None:
+    if not path.exists():
+        return
+    img = Image.new("RGBA", (16, 16), (120, 120, 120))
+    draw = ImageDraw.Draw(img)
+    random.seed(11)
+    for y in range(16):
+        for x in range(16):
+            base = 110 + ((x * 3 + y * 5) % 4) * 8
+            draw.point((x, y), fill=(base, base, base))
+    for _ in range(4):
+        _spot(draw, random.randint(0, 12), random.randint(0, 12), 2, 2, (90, 90, 90))
+    img.save(path, optimize=True)
+
+
+def cowify_crafting_table(path: Path) -> None:
+    if not path.exists():
+        return
+    img = Image.new("RGBA", (16, 16), (160, 110, 60))
+    draw = ImageDraw.Draw(img)
+    # grid lines
+    for i in (5, 10):
+        draw.line([(i, 2), (i, 14)], fill=(100, 65, 30))
+        draw.line([(2, i), (14, i)], fill=(100, 65, 30))
+    _spot(draw, 3, 3, 2, 2, CREAM)
+    _spot(draw, 11, 11, 2, 2)
+    img.save(path, optimize=True)
+
+
 def apply_kid_textures(pack_rp: Path = PACK_RP, *, refresh_baked: bool = False) -> int:
     count = 0
     jobs: list[tuple[str, object]] = [
@@ -114,6 +143,8 @@ def apply_kid_textures(pack_rp: Path = PACK_RP, *, refresh_baked: bool = False) 
         ("textures/items/bread.png", cowify_bread),
         ("textures/items/wheat.png", draw_feed_bag),
         ("textures/items/villagebell.png", draw_ranch_bell),
+        ("textures/blocks/cobblestone.png", cowify_cobblestone),
+        ("textures/blocks/crafting_table_top.png", cowify_crafting_table),
     ]
     for rel, fn in jobs:
         path = pack_rp / rel
