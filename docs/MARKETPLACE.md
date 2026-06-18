@@ -146,7 +146,7 @@ We rely on `validate_marketplace.py` + iPad playtests for day-to-day CI gates; M
 | Date | Change |
 |------|--------|
 | 2026-06-15 | Phase 1 start: `bgcow:ranch_bell` / `bgcow:feed_bag`, removed JSON UI from build, `apply_pack_lang.py` |
-| 2026-06-15 | Autoresearch exp 7: baked stone + chest textures; `validate_marketplace.py` in checks loop |
+| 2026-06-18 | Build-time cel/toon bake in `texture_polish.py` (luminance bands + ink outlines; no in-game shaders) |
 | 2026-06-18 | Autoresearch exp 8: baked coal_ore + iron_ore kid textures (cow-spot ore blocks) |
 | 2026-06-18 | Autoresearch exp 9: baked netherrack + furnace_front off/on kid textures (cow-spot nether + lit nose) |
 | 2026-06-18 | Autoresearch exp 10: baked gold_ore + diamond_ore + emerald_ore kid textures (cow-spot ore blocks) |
