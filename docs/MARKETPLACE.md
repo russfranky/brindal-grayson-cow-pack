@@ -2,7 +2,7 @@
 
 **Product:** Brindal & Grayson Cow Ranch — world template / cooperative add-on  
 **Status:** In progress — keep this file updated until we ship or abandon Marketplace  
-**Last updated:** 2026-06-18 (Phase 4 experiment matrix)
+**Last updated:** 2026-06-18 (Phase 3 world scaffold + Phase 4 experiment matrix)
 
 ---
 
@@ -42,7 +42,7 @@
 
 | | Task | Notes |
 |---|------|-------|
-| ☐ | Professional texture pass (blocks, items, cows, icon) | Baked procedural art — stone, chest, cobble, grass added |
+| ☐ | Professional texture pass (blocks, items, cows, icon) | Baked procedural art — stone, chest, cobble, grass, coal/iron ore added |
 | ☐ | Visible in-world traits (horns, marks) on custom cows | Partially done |
 | ☐ | Menu music + SFX review (length, loudness, loop) | Trimmed lite menu track shipped |
 | ☐ | Marketing key art (store tile, panorama optional) | 512+ store assets |
@@ -54,7 +54,7 @@
 
 | | Task | Notes |
 |---|------|-------|
-| ☐ | Ship locked **world template** with barn tutorial | Signs, starter kit, wild cow spawn |
+| ☐ | Ship locked **world template** with barn tutorial | Scaffold: [`worlds/brindal_grayson_ranch/`](../worlds/brindal_grayson_ranch/) — human export still required |
 | ☐ | Onboarding without reading chat (ActionForm menus) | Ranch Bell menu + herd picker done |
 | ☐ | Parent commands optional (`/bgcow:*`) | Hidden from kid path |
 | ☐ | Save/persistence tested across sessions | `bgcow:barn_v1` dynamic property |
@@ -114,7 +114,7 @@ We rely on `validate_marketplace.py` + iPad playtests for day-to-day CI; run MCT
 1. **Beta APIs** — Cow Barn still requires Script API experimental toggle for new worlds.
 2. **Holiday Creator Features** — Custom `bgcow:` entities require HCF in new worlds.
 3. **Art quality** — Procedural/baked textures below Marketplace visual bar.
-4. **No world template** — Add-on only today; Marketplace world needs pre-built ranch.
+4. **No world template (binary)** — Add-on only today. **Partial:** repo scaffold at [`worlds/brindal_grayson_ranch/`](../worlds/brindal_grayson_ranch/) (manifest, checklist, experiments reference); `.mctemplate` must be built/exported on iPad or Win10 — see `WORLD_CHECKLIST.md`.
 5. **Partner account** — No publisher path confirmed in repo.
 
 ---
@@ -125,6 +125,8 @@ We rely on `validate_marketplace.py` + iPad playtests for day-to-day CI; run MCT
 |------|--------|
 | 2026-06-15 | Phase 1 start: `bgcow:ranch_bell` / `bgcow:feed_bag`, removed JSON UI from build, `apply_pack_lang.py` |
 | 2026-06-15 | Autoresearch exp 7: baked stone + chest textures; `validate_marketplace.py` in checks loop |
+| 2026-06-18 | Autoresearch exp 8: baked coal_ore + iron_ore kid textures (cow-spot ore blocks) |
+| 2026-06-18 | Phase 3 scaffold: `worlds/brindal_grayson_ranch/` (README, WORLD_CHECKLIST, manifest stub, experiments reference); `validate_world_scaffold.py` in checks |
 | 2026-06-18 | Phase 4: experiment matrix in TESTING.md; MCTools note; marketplace validator checks Beta APIs + cow UI |
 
 ---
@@ -136,3 +138,4 @@ We rely on `validate_marketplace.py` + iPad playtests for day-to-day CI; run MCT
 - [TESTING.md](../TESTING.md) — manual QA
 - [docs/mob-index/MOB_INDEX.md](mob-index/MOB_INDEX.md) — mob approvals
 - [development.md](development.md) — build pipeline
+- [worlds/brindal_grayson_ranch/](../worlds/brindal_grayson_ranch/) — Marketplace world template scaffold (Phase 3)
