@@ -63,7 +63,8 @@ def main() -> None:
     cell = 16 * scale
     gap = 12
     pad = 20
-    cols, rows = 4, 2
+    cols = 2
+    rows = len(SAMPLES)
     header = 64
     label = 22
     w = pad * 2 + cols * cell + (cols - 1) * gap
@@ -75,18 +76,18 @@ def main() -> None:
     draw.text((w // 2, 42), "Build-time only — baked into PNGs, no in-game shaders", fill=(150, 160, 170), font=font(11), anchor="mm")
 
     y = header + pad
-    for rel, title, base in SAMPLES:
+    for row_idx, (rel, title, base) in enumerate(SAMPLES):
         src = load_src(rel, base)
         prof = profile_for_path(rel)
         pair = (legacy(src.copy(), prof), polish_image(src.copy(), prof))
         tags = ("Before", "Cel bake")
+        row_y = y + row_idx * (cell + label + gap)
         for col, img in enumerate(pair):
             x = pad + col * (cell + gap)
-            canvas.paste(up(img, scale), (x, y))
-            draw.rectangle([x - 1, y - 1, x + cell, y + cell], outline=(80, 90, 100))
-            draw.text((x + cell // 2, y + cell + 6), tags[col], fill=(180, 190, 200), font=font(10), anchor="mm")
-        draw.text((pad + 2 * (cell + gap) - gap // 2, y + cell + label - 4), title, fill=(255, 220, 120), font=font(11, True), anchor="mm")
-        y += cell + label + gap
+            canvas.paste(up(img, scale), (x, row_y))
+            draw.rectangle([x - 1, row_y - 1, x + cell, row_y + cell], outline=(80, 90, 100))
+            draw.text((x + cell // 2, row_y + cell + 6), tags[col], fill=(180, 190, 200), font=font(10), anchor="mm")
+        draw.text((pad + 2 * (cell + gap) + gap, row_y + cell // 2), title, fill=(255, 220, 120), font=font(11, True), anchor="lm")
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     canvas.save(OUT, optimize=True)
