@@ -94,6 +94,7 @@ def build_all(
 
     # Vanilla cow skins only — no Venice/cel unless explicitly opted in.
     run_script("reset_cow_skins.py")
+    run_script("bake_chaos_chickens.py")
 
     use_venice = venice
 

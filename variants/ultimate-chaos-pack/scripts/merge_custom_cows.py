@@ -16,16 +16,24 @@ CUSTOM_BP = REPO_ROOT / "behavior_packs" / "brindal_grayson_cow_bp"
 RP_COPY = [
     ("entity/brindal_cow.entity.json", "entity/brindal_cow.entity.json"),
     ("entity/grayson_cow.entity.json", "entity/grayson_cow.entity.json"),
+    ("entity/zombie_chicken.entity.json", "entity/zombie_chicken.entity.json"),
+    ("entity/chaos_chicken.entity.json", "entity/chaos_chicken.entity.json"),
     ("textures/entity/brindal_cow.png", "textures/entity/brindal_cow.png"),
     ("textures/entity/grayson_cow.png", "textures/entity/grayson_cow.png"),
+    ("textures/entity/zombie_chicken.png", "textures/entity/zombie_chicken.png"),
+    ("textures/entity/chaos_chicken.png", "textures/entity/chaos_chicken.png"),
     ("textures/item_texture.json", "textures/item_texture.json"),
 ]
 
 BP_COPY = [
     ("entities/brindal_cow.json", "entities/brindal_cow.json"),
     ("entities/grayson_cow.json", "entities/grayson_cow.json"),
+    ("entities/zombie_chicken.json", "entities/zombie_chicken.json"),
+    ("entities/chaos_chicken.json", "entities/chaos_chicken.json"),
     ("spawn_rules/brindal_cow.json", "spawn_rules/brindal_cow.json"),
     ("spawn_rules/grayson_cow.json", "spawn_rules/grayson_cow.json"),
+    ("spawn_rules/zombie_chicken.json", "spawn_rules/zombie_chicken.json"),
+    ("spawn_rules/chaos_chicken.json", "spawn_rules/chaos_chicken.json"),
     ("items/ranch_bell.json", "items/ranch_bell.json"),
     ("items/feed_bag.json", "items/feed_bag.json"),
 ]

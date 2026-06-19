@@ -11,7 +11,7 @@ python3 scripts/generate_mob_index.py
 
 Open [`index.html`](index.html) in a browser for the full gallery.
 
-**2 shipped** · **2 approved** · 27 total
+**4 shipped** · **4 approved** · 29 total
 
 ## Shipped in pack
 
@@ -23,6 +23,14 @@ Open [`index.html`](index.html) in a browser for the full gallery.
 - **Texture:** `textures/entity/brindal_cow.png`
 - **Note:** Auto-added — set approved true after visual review
 
+### ✅ Giant Chaos Chicken (`chaos_chicken`)
+
+![Giant Chaos Chicken](previews/chaos_chicken.png)
+
+- **Identifier:** `bgcow:chaos_chicken`
+- **Texture:** `textures/entity/chaos_chicken.png`
+- **Note:** Giant chaos chickens — random sizes peep to mega
+
 ### ✅ Grayson Cow (`grayson_cow`)
 
 ![Grayson Cow](previews/grayson_cow.png)
@@ -30,6 +38,14 @@ Open [`index.html`](index.html) in a browser for the full gallery.
 - **Identifier:** `bgcow:grayson_cow`
 - **Texture:** `textures/entity/grayson_cow.png`
 - **Note:** Auto-added — set approved true after visual review
+
+### ✅ Zombie Chicken (`zombie_chicken`)
+
+![Zombie Chicken](previews/zombie_chicken.png)
+
+- **Identifier:** `bgcow:zombie_chicken`
+- **Texture:** `textures/entity/zombie_chicken.png`
+- **Note:** Procedural laser-eye zombie chicken — kid-safe, no attack
 
 ## Venice catalog (not shipped)
 

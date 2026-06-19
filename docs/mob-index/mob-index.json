@@ -1,14 +1,16 @@
 {
-  "generated_at": "2026-06-19T01:25:59.643665+00:00",
+  "generated_at": "2026-06-19T01:36:42.590930+00:00",
   "version": 1,
   "shipped_ids": [
     "brindal_cow",
-    "grayson_cow"
+    "chaos_chicken",
+    "grayson_cow",
+    "zombie_chicken"
   ],
   "summary": {
-    "total": 27,
-    "shipped": 2,
-    "approved": 2,
+    "total": 29,
+    "shipped": 4,
+    "approved": 4,
     "pending_ship_blockers": 0
   },
   "mobs": [
@@ -33,6 +35,26 @@
       "preview": "previews/brindal_cow.png"
     },
     {
+      "id": "chaos_chicken",
+      "name": "Giant Chaos Chicken",
+      "identifier": "bgcow:chaos_chicken",
+      "source": "custom",
+      "category": "entity",
+      "pack_path": "textures/entity/chaos_chicken.png",
+      "target_size": 64,
+      "shipped": true,
+      "prompt": "",
+      "geometry": "geometry.chicken.v1.12",
+      "spawn_egg_base": "#9b59ff",
+      "spawn_egg_overlay": "#ff8c00",
+      "approved": true,
+      "reviewer": "charles-chaos",
+      "note": "Giant chaos chickens — random sizes peep to mega",
+      "has_texture": true,
+      "texture_source": "resource_packs/brindal_grayson_cow_rp/textures/entity/chaos_chicken.png",
+      "preview": "previews/chaos_chicken.png"
+    },
+    {
       "id": "grayson_cow",
       "name": "Grayson Cow",
       "identifier": "bgcow:grayson_cow",
@@ -51,6 +73,26 @@
       "has_texture": true,
       "texture_source": "resource_packs/brindal_grayson_cow_rp/textures/entity/grayson_cow.png",
       "preview": "previews/grayson_cow.png"
+    },
+    {
+      "id": "zombie_chicken",
+      "name": "Zombie Chicken",
+      "identifier": "bgcow:zombie_chicken",
+      "source": "custom",
+      "category": "entity",
+      "pack_path": "textures/entity/zombie_chicken.png",
+      "target_size": 64,
+      "shipped": true,
+      "prompt": "",
+      "geometry": "geometry.chicken.v1.12",
+      "spawn_egg_base": "#3d6b35",
+      "spawn_egg_overlay": "#ff1744",
+      "approved": true,
+      "reviewer": "charles-chaos",
+      "note": "Procedural laser-eye zombie chicken — kid-safe, no attack",
+      "has_texture": true,
+      "texture_source": "resource_packs/brindal_grayson_cow_rp/textures/entity/zombie_chicken.png",
+      "preview": "previews/zombie_chicken.png"
     },
     {
       "id": "bee",

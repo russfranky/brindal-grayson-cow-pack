@@ -13,6 +13,18 @@
       "reviewer": "",
       "note": "Auto-added — set approved true after visual review"
     },
+    "zombie_chicken": {
+      "approved": true,
+      "shipped": true,
+      "reviewer": "charles-chaos",
+      "note": "Procedural laser-eye zombie chicken — kid-safe, no attack"
+    },
+    "chaos_chicken": {
+      "approved": true,
+      "shipped": true,
+      "reviewer": "charles-chaos",
+      "note": "Giant chaos chickens — random sizes peep to mega"
+    },
     "bee": {
       "approved": false,
       "shipped": false,

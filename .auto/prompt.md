@@ -131,6 +131,13 @@ python3 scripts/autoresearch/summarize.py
 - `docs/MARKETPLACE.md` living checklist
 - Real `bgcow:ranch_bell` / `bgcow:feed_bag` items; lang-only pack branding (no JSON UI)
 
+### Experiment 12 — KEEP (zombie laser chickens + kid UX)
+
+- `bake_chaos_chickens.py`: procedural `zombie_chicken.png` (green + red laser eyes) + `chaos_chicken.png` (rainbow giant)
+- Custom entities `bgcow:zombie_chicken` + `bgcow:chaos_chicken` with size randomize (peep → giant)
+- `main.js`: simpler welcome, no auto-deploy trap, chaos chickens on join, laser eye particles
+- Spawn eggs + wild spawn rules for both chickens
+
 ### Next ideas (backlog)
 
 - Hubzz-3d-pipeline stage alignment when repo is accessible

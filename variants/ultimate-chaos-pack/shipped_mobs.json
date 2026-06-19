@@ -1,4 +1,4 @@
 {
   "comment": "Mob texture IDs shipped in the lite overlay pack. Update when enabling Venice entity mobs in the build.",
-  "ids": ["brindal_cow", "grayson_cow"]
+  "ids": ["brindal_cow", "grayson_cow", "zombie_chicken", "chaos_chicken"]
 }

@@ -13,6 +13,9 @@ import { ActionFormData } from "@minecraft/server-ui";
 const COW = "minecraft:cow";
 const SPOT_COW = "bgcow:brindal_cow";
 const STORM_COW = "bgcow:grayson_cow";
+const ZOMBIE_CHICKEN = "bgcow:zombie_chicken";
+const CHAOS_CHICKEN = "bgcow:chaos_chicken";
+const CHAOS_CHICKENS = new Set([ZOMBIE_CHICKEN, CHAOS_CHICKEN]);
 const CATCHABLE_COWS = new Set([COW, SPOT_COW, STORM_COW]);
 const CATALOG_SLOTS = 15; // coats(5) + horns(3) + sizes(3) + marks(4)
 
@@ -52,9 +55,10 @@ const TRAIT_DISCOVERY_LOOT = {
 };
 
 const BETA_APIS_HINT =
-  "Cow Barn needs Beta APIs ON in a NEW world. Ask a grown-up to turn on Beta APIs.";
+  "Turn on Beta APIs in a NEW world. Ask a grown-up for help!";
 const HCF_HINT =
-  "Custom cows need Holiday Creator Features ON in a NEW world.";
+  "Turn on Holiday Creator Features in a NEW world.";
+const CHAOS_PREFIX = "§d[Chaos] §f";
 
 const deployedEntities = new Map();
 const lastUiTick = new Map();
@@ -144,7 +148,7 @@ function countWildCows(player, maxDistance = 16) {
 
 function say(player, msg) {
   try {
-    player.sendMessage(`§6[Cow Barn] §f${msg}`);
+    player.sendMessage(`${CHAOS_PREFIX}${msg}`);
   } catch (_) {
     /* spectator */
   }
@@ -152,7 +156,7 @@ function say(player, msg) {
 
 function title(player, msg) {
   try {
-    player.onScreenDisplay.setActionBar(`§e🐄 ${msg}`);
+    player.onScreenDisplay.setActionBar(`§d🐔 ${msg}`);
   } catch (_) {
     say(player, msg);
   }
@@ -165,6 +169,12 @@ function touchUi(player) {
 function mooSound(player) {
   try {
     player.playSound("mob.cow.say", { volume: 1.0, pitch: 0.85 + Math.random() * 0.3 });
+  } catch (_) {}
+}
+
+function cluckSound(player) {
+  try {
+    player.playSound("mob.chicken.say", { volume: 1.0, pitch: 0.7 + Math.random() * 0.5 });
   } catch (_) {}
 }
 
@@ -543,6 +553,64 @@ function spawnTutorialWildCow(player) {
   return spawned;
 }
 
+function spawnNearbyChaosChickens(player, target = 4) {
+  const dim = playerDim(player);
+  const types = [ZOMBIE_CHICKEN, CHAOS_CHICKEN, CHAOS_CHICKEN, ZOMBIE_CHICKEN];
+  const offsets = [
+    [2, 1],
+    [-2, 2],
+    [4, -1],
+    [-3, -2],
+    [1, 4],
+    [-4, 1],
+  ];
+  let spawned = 0;
+  for (let i = 0; i < offsets.length && spawned < target; i += 1) {
+    const [dx, dz] = offsets[i];
+    const typeId = types[i % types.length];
+    const loc = safeSpawnNear(player, dx, dz);
+    if (trySpawnEntity(dim, typeId, loc)) spawned += 1;
+  }
+  return spawned;
+}
+
+function countNearbyChickens(player, maxDistance = 24) {
+  let n = 0;
+  try {
+    for (const entity of playerDim(player).getEntities({
+      location: player.location,
+      maxDistance,
+    })) {
+      if (CHAOS_CHICKENS.has(entity.typeId)) n += 1;
+    }
+  } catch (_) {
+    /* ignore */
+  }
+  return n;
+}
+
+function pulseLaserEyes() {
+  if (!scriptReady) return;
+  for (const player of world.getPlayers()) {
+    try {
+      const dim = playerDim(player);
+      for (const entity of dim.getEntities({
+        location: player.location,
+        maxDistance: 20,
+        type: ZOMBIE_CHICKEN,
+      })) {
+        if (Math.random() > 0.35) continue;
+        const l = entity.location;
+        player.runCommandAsync(
+          `particle minecraft:redstone_particle ${l.x} ${l.y + 0.55} ${l.z + 0.2}`
+        );
+      }
+    } catch (_) {
+      /* ignore */
+    }
+  }
+}
+
 function ensureNearbyCows(player, barn, wildTarget = 2) {
   let spawned = 0;
   while (countWildCows(player) < wildTarget && spawned < wildTarget) {
@@ -550,12 +618,7 @@ function ensureNearbyCows(player, barn, wildTarget = 2) {
     if (!batch) break;
     spawned += batch;
   }
-  if (spawned > 0) {
-    say(player, `§a§l${spawned} wild cow(s) spawned — use Feed Bag to catch!`);
-    mooSound(player);
-  }
-  if (!barn.deployedEntityId) deployActive(player, barn);
-  return countWildCows(player) + (barn.deployedEntityId ? 1 : 0);
+  return countWildCows(player);
 }
 
 function reconcileDeployed(player, barn) {
@@ -665,12 +728,13 @@ function showBarnStatus(player, barn, extra = "") {
   touchUi(player);
   const rank = barnRank(barn);
   const active = getCow(barn, barn.activeId);
-  const next = BELL_MODES[barn.bellMode].toUpperCase();
-  const activeTxt = active ? ` · ${cowLabel(active)}` : "";
-  const hungry = active && active.hunger < 40 ? " §c· feed me!" : "";
+  const hungry = active && active.hunger < 40 ? " · §cfeed cow!" : "";
+  const chickens = countNearbyChickens(player);
+  const chickenHint = chickens > 0 ? ` · §d${chickens} chickens!` : "";
   title(
     player,
-    extra || `${rank.label} · ${barn.cows.length}/${maxSlots(barn)} · Catalog ${barn.catalog.length}/${CATALOG_SLOTS}${activeTxt}${hungry} · Tap Bell`
+    extra ||
+      `${rank.label} · ${barn.cows.length} cows${chickenHint}${hungry} · Tap Ranch Bell`
   );
 }
 
@@ -971,8 +1035,9 @@ function ensureOnboarded(player) {
   giveStarterKit(player);
   const barn = loadBarn(player);
   ensureNearbyCows(player, barn);
-  say(player, "§6Cow Barn kit added!§f Ranch Bell + Feed Bag + spawn eggs in inventory.");
-  say(player, "§eNEW world needs Beta APIs + Holiday Creator Features ON.");
+  spawnNearbyChaosChickens(player, 3);
+  say(player, "§aStarter kit!§f Ranch Bell · Feed Bag · spawn eggs.");
+  say(player, "§7Grown-up: NEW world + Beta APIs + Holiday Creator Features ON.");
   return true;
 }
 
@@ -984,9 +1049,12 @@ function giveStarterKit(player) {
       [RANCH_BELL_ID, 1],
       [FEED_BAG_ID, 16],
       ["minecraft:cookie", 4],
+      ["minecraft:wheat_seeds", 16],
       ["minecraft:cow_spawn_egg", 2],
       ["bgcow:brindal_cow_spawn_egg", 1],
       ["bgcow:grayson_cow_spawn_egg", 1],
+      ["bgcow:zombie_chicken_spawn_egg", 2],
+      ["bgcow:chaos_chicken_spawn_egg", 2],
     ];
     for (const [id, count] of stacks) {
       try {
@@ -1004,36 +1072,29 @@ function welcomePlayer(player) {
   const barn = loadBarn(player);
   reconcileDeployed(player, barn);
   giveStarterKit(player);
-  const starter = getCow(barn, barn.activeId);
   try {
-    player.onScreenDisplay.setTitle("§6Cow Barn!");
+    player.onScreenDisplay.setTitle("§d§lCharles' Chaos World!");
   } catch (_) {
     /* ignore */
   }
-  say(player, "§eTap the §lRanch Bell§f and §lFeed Bag§f in your hotbar!");
-  say(player, "§eFeed Bag§f near a wild cow catches it. Need 3 cows to breed!");
-  say(player, "§7Spawn eggs in inventory = instant cows (Spot & Storm too).");
-  say(player, "§7Deployed cows show traits: §6⌇§7/§7⌇§7 horns, §e★§7/§b◆§7 marks, size in name.");
-  if (starter) say(player, `Starter barn cow: ${cowLabel(starter)}`);
+  const chickens = spawnNearbyChaosChickens(player, 5);
+  ensureNearbyCows(player, barn, 2);
+  const wild = countWildCows(player);
+  say(player, "§eTap §lRanch Bell§f for your barn · §lFeed Bag§f catches wild cows.");
+  if (chickens > 0) {
+    say(player, `§d§l${chickens} chaos chickens!§f Zombie laser eyes + giant sizes!`);
+    cluckSound(player);
+  }
+  if (wild >= 1) {
+    title(player, "Feed Bag near a cow to catch it!");
+  } else {
+    title(player, "Use spawn eggs or explore for cows & chickens!");
+  }
   if (barn.tutorialStep < 1) {
     barn.tutorialStep = 1;
     saveBarn(player, barn);
   }
-  ensureNearbyCows(player, barn, 2);
-  deployActive(player, barn);
-  const wild = countWildCows(player);
-  const total = countNearbyCows(player);
-  if (wild >= 1) {
-    title(player, "Wild cows nearby — Feed Bag to catch!");
-    say(player, `§a§l${wild} wild cow(s) nearby!§f Tap Feed Bag on one to catch it.`);
-  } else if (total > 0) {
-    title(player, "Your barn cow is here — spawn eggs make more!");
-    say(player, "§eTap a §lcow spawn egg§f in inventory, then tap the ground.");
-  } else {
-    say(player, "§eTap a §lcow spawn egg§f in inventory, then tap the ground.");
-  }
   progressHint(player, barn);
-  mooSound(player);
   showBarnStatus(player, barn);
 }
 
@@ -1041,11 +1102,10 @@ function welcomePlayer(player) {
 
 const HANDLERS = {
   help(player) {
-    say(player, "§6══ Cow Barn ══");
-    say(player, "§eRanch Bell§f opens the barn menu (Deploy · Feed · Breed · Recall)");
-    say(player, "§eFeed Bag§f feeds your cow. Near a wild cow = catch.");
-    say(player, "Recall also switches to your next cow.");
-    say(player, "/bgcow:barn — herd list · /bgcow:next — switch active cow");
+    say(player, "§d══ Charles' Chaos ══");
+    say(player, "§eRanch Bell§f = barn menu · §eFeed Bag§f = feed or catch cows");
+    say(player, "§dChaos chickens§f spawn wild — zombie laser eyes + giant sizes!");
+    say(player, "/bgcow:barn — herd · /bgcow:next — switch cow");
   },
   barn(player) {
     const barn = loadBarn(player);
@@ -1105,7 +1165,7 @@ system.beforeEvents.startup.subscribe((init) => {
       );
     }
     commandsReady = true;
-    console.warn("[Cow Barn] Ready — breed, deploy, collect.");
+    console.warn("[Chaos] Ready — cows, chickens, barn.");
   } catch (err) {
     console.warn("[Cow Barn] Command registration failed (bell/items still work):", err);
   }
@@ -1177,6 +1237,10 @@ system.runInterval(() => {
     }
   }
 }, 200);
+
+system.runInterval(() => {
+  pulseLaserEyes();
+}, 80);
 
 // ─── Join ──────────────────────────────────────────────────────────────────
 

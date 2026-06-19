@@ -51,6 +51,24 @@ CUSTOM_MOBS = (
         "entity_json": CUSTOM_RP / "entity/grayson_cow.entity.json",
         "texture_file": CUSTOM_RP / "textures/entity/grayson_cow.png",
     },
+    {
+        "id": "zombie_chicken",
+        "name": "Zombie Chicken",
+        "identifier": "bgcow:zombie_chicken",
+        "source": "custom",
+        "texture_path": "textures/entity/zombie_chicken.png",
+        "entity_json": CUSTOM_RP / "entity/zombie_chicken.entity.json",
+        "texture_file": CUSTOM_RP / "textures/entity/zombie_chicken.png",
+    },
+    {
+        "id": "chaos_chicken",
+        "name": "Giant Chaos Chicken",
+        "identifier": "bgcow:chaos_chicken",
+        "source": "custom",
+        "texture_path": "textures/entity/chaos_chicken.png",
+        "entity_json": CUSTOM_RP / "entity/chaos_chicken.entity.json",
+        "texture_file": CUSTOM_RP / "textures/entity/chaos_chicken.png",
+    },
 )
 
 
