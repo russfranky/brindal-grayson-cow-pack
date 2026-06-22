@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Sunlit Diorama build artifacts."""
+"""Validate Cel Band Toolkit build artifacts."""
 
 from __future__ import annotations
 
@@ -9,9 +9,9 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PACK = ROOT / "dist" / "Sunlit_Diorama.mcpack"
+PACK = ROOT / "dist" / "Cel_Band_Pack.mcpack"
 SAMPLE = ROOT / "download" / "sample_level.json"
-TOOL = ROOT / "variants" / "sunlit-diorama" / "scripts" / "diorama_mc_tool.py"
+TOOL = ROOT / "variants" / "cel-band" / "scripts" / "diorama_mc_tool.py"
 
 
 def fail(message: str) -> None:

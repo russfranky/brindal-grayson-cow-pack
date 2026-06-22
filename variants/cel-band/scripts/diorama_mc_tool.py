@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Sunlit Diorama — Minecraft Bedrock 1.21+ resource pack builder.
+Cel Band Toolkit — Minecraft Bedrock 1.21+ pack builder and voxel converter.
 
 Single source of truth: edit PALETTE, rerun --mode all.
 Spec: download/Voxel_Spec.pdf
@@ -465,10 +465,10 @@ def write_manifest(out_dir: Path) -> None:
     manifest = {
         "format_version": 2,
         "header": {
-            "name": "Sunlit Diorama Pack",
+            "name": "Cel Band Pack",
             "description": (
-                "Sunlit outdoor diorama aesthetic: warm stone + Holstein spots + "
-                "4-step cel + ink outlines"
+                "Four-step cel bands + Holstein spots + ink outlines. "
+                "Warm stone, shadow, water, and relic palettes for Bedrock builders."
             ),
             "uuid": PACK_HEADER_UUID,
             "version": [1, 0, 0],
@@ -556,7 +556,7 @@ def parse_origin(s: str) -> tuple[int, int, int]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Sunlit Diorama → Minecraft Bedrock pack tool")
+    parser = argparse.ArgumentParser(description="Cel Band Toolkit — Bedrock pack and voxel tool")
     parser.add_argument(
         "--mode",
         choices=["all", "textures", "pack", "convert"],
@@ -576,7 +576,7 @@ def main() -> None:
 
     if args.mode in ("all", "pack"):
         write_manifest(out)
-        mcpack = REPO_ROOT / "download" / "Sunlit_Diorama.mcpack"
+        mcpack = REPO_ROOT / "download" / "Cel_Band_Pack.mcpack"
         assemble_mcpack(out, mcpack)
         kb = mcpack.stat().st_size / 1024
         print(f"Packaged {mcpack} ({kb:.1f} KB)")

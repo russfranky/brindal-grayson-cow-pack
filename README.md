@@ -1,26 +1,23 @@
-# Sunlit Diorama
+# Cel Band Toolkit
 
-A **Minecraft Bedrock 1.21+ resource pack** with a sunlit outdoor diorama look: warm stone surfaces, Holstein spot accents, four-step cel bands, and ink outlines.
+A **Minecraft Bedrock 1.21+ cel-band system** for builders: procedural block textures, a voxel level converter, and a tile specification — not just a resource pack.
 
-| | |
-|---|---|
-| **Pack type** | Global resource pack (`.mcpack`) |
-| **Engine** | Bedrock 1.21.0+ |
-| **Size** | ~11 KB |
-| **Tooling** | Python generator + voxel level converter |
+| Component | What it does |
+|-----------|--------------|
+| **Cel Band Pack** | Global resource pack — four-step cel bands, Holstein spots, ink outlines |
+| **Voxel converter** | Level JSON → `/setblock` commands and `.mcfunction` files |
+| **Voxel spec** | 12 tile types, palette rules, builder reference (PDF) |
 
 ---
 
-## Install
+## Install the pack
 
 ### Option A — Latest release
 
-Download the attached `.mcpack` from [GitHub Releases](https://github.com/russfranky/charles-world-of-chaos/releases/latest):
-
-**[Sunlit_Diorama.mcpack](https://github.com/russfranky/charles-world-of-chaos/releases/latest/download/Sunlit_Diorama.mcpack)**
+**[Cel_Band_Pack.mcpack](https://github.com/russfranky/charles-world-of-chaos/releases/latest/download/Cel_Band_Pack.mcpack)**
 
 1. Open the file on your device (or import via Minecraft).
-2. Go to **Settings → Global Resources** and activate **Sunlit Diorama**.
+2. Go to **Settings → Global Resources** and activate **Cel Band Pack**.
 3. Load any Bedrock world — block textures update immediately.
 
 ### Option B — Build from source
@@ -30,47 +27,47 @@ pip3 install -r requirements.txt
 ./scripts/build_pack.sh
 ```
 
-The pack is written to `dist/Sunlit_Diorama.mcpack`.
-
-See [docs/installation.md](docs/installation.md) for platform-specific steps.
+Output: `dist/Cel_Band_Pack.mcpack`. See [docs/installation.md](docs/installation.md).
 
 ---
 
 ## Visual system
 
-Four cel bands map to vanilla blocks for builder-friendly placement:
+Four cel bands map to vanilla blocks for in-game placement:
 
 | Band | Block | Use |
 |------|-------|-----|
-| Lit cream | `calcite` | Sunlit tops |
-| Warm sand | `stone` | Lit sides |
-| Warm brown | `deepslate` | Shadow sides |
-| Deep shadow | `bedrock` | Cave floors / underhangs |
+| Lit cream | `calcite` | Top faces, highlights |
+| Warm sand | `stone` | Lit side faces |
+| Warm brown | `deepslate` | Occluded sides |
+| Deep shadow | `bedrock` | Cave floors, underhangs |
 
-Holstein spot masks and ink outlines are baked into block textures. Relic blocks (gold, emerald, copper) use warm bronze and jade tones from the diorama palette.
+Holstein spot masks and ink outlines are baked into block textures. Relic blocks (gold, emerald, copper) use bronze and jade tones. Water, moss, bark, and dirt each have their own three-band variants.
 
 ---
 
-## Deliverables
+## Voxel pipeline
 
-| Path | Description |
-|------|-------------|
-| `dist/Sunlit_Diorama.mcpack` | Shipped resource pack |
-| `download/` | Release bundle (pack, tool, sample level, voxel spec PDF) |
-| `variants/sunlit-diorama/` | Source of truth for the generator and sample level |
-| `variants/sunlit-diorama/scripts/diorama_mc_tool.py` | Texture generator + voxel converter |
-
-### Sample level
-
-`download/sample_level.json` is a Cave of Snakes vignette (45 tiles → 50 block placements). Convert or paste into a world:
+Author levels as JSON, convert to Bedrock placements:
 
 ```bash
-python3 variants/sunlit-diorama/scripts/diorama_mc_tool.py --mode convert \
-  --level variants/sunlit-diorama/levels/sample_level.json \
+python3 variants/cel-band/scripts/diorama_mc_tool.py --mode convert \
+  --level variants/cel-band/levels/sample_level.json \
   --origin 100,64,200
 ```
 
-Outputs `/setblock` commands (`sample_level.setblock`) and an `.mcfunction` file.
+The included **Cave of Snakes** sample (`download/sample_level.json`) exercises all 12 tile types.
+
+---
+
+## Repository layout
+
+| Path | Description |
+|------|-------------|
+| `dist/Cel_Band_Pack.mcpack` | Shipped resource pack |
+| `variants/cel-band/` | Generator source, sample level, version |
+| `variants/cel-band/scripts/diorama_mc_tool.py` | Textures + pack + voxel converter |
+| `download/` | Release bundle (pack, tool, sample, voxel spec PDF) |
 
 ---
 
@@ -78,7 +75,7 @@ Outputs `/setblock` commands (`sample_level.setblock`) and an `.mcfunction` file
 
 - [Installation guide](docs/installation.md)
 - [Development guide](docs/development.md)
-- [Voxel spec PDF](download/Voxel_Spec.pdf) — tile types and palette rules
+- [Voxel spec PDF](download/Voxel_Spec.pdf)
 
 ---
 

@@ -1,63 +1,52 @@
 # Installation
 
-Install **Sunlit Diorama** on Minecraft Bedrock 1.21 or newer.
+Install **Cel Band Pack** on Minecraft Bedrock 1.21 or newer.
 
 ## Download
 
-**[Latest release — Sunlit_Diorama.mcpack](https://github.com/russfranky/charles-world-of-chaos/releases/latest/download/Sunlit_Diorama.mcpack)**
+**[Latest release — Cel_Band_Pack.mcpack](https://github.com/russfranky/charles-world-of-chaos/releases/latest/download/Cel_Band_Pack.mcpack)**
 
-Or build locally: `./scripts/build_pack.sh` → open `dist/Sunlit_Diorama.mcpack`.
+Or build locally: `./scripts/build_pack.sh` → open `dist/Cel_Band_Pack.mcpack`.
 
 ## Platform steps
 
 ### Windows / macOS
 
-1. Double-click the `.mcpack` file (or right-click → Open with Minecraft).
-2. Minecraft imports the pack automatically.
-3. **Settings → Global Resources** → move **Sunlit Diorama** to Active.
-4. Open any world.
+1. Double-click the `.mcpack` file.
+2. **Settings → Global Resources** → activate **Cel Band Pack**.
+3. Open any world.
 
 ### iOS / iPadOS
 
-1. Download the `.mcpack` in Safari.
-2. Tap the file → **Open in Minecraft**.
-3. **Settings → Global Resources** → activate the pack.
-4. Open any world.
+1. Download in Safari → **Open in Minecraft**.
+2. **Settings → Global Resources** → activate the pack.
 
 ### Android
 
-1. Download the `.mcpack`.
-2. Open with Minecraft (or place in `games/com.mojang/.../resource_packs/` on some devices).
-3. Activate under **Settings → Global Resources**.
+1. Download and open with Minecraft.
+2. Activate under **Settings → Global Resources**.
 
 ## Per-world activation
 
-Instead of global resources, you can enable the pack for a single world:
-
-1. Edit the world → **Resource Packs**.
-2. Add **Sunlit Diorama** to the active list.
+Edit world → **Resource Packs** → add **Cel Band Pack**.
 
 ## Updating
 
-Re-download the latest release `.mcpack` and import again. The pack UUID is stable across versions; newer semver replaces the previous install.
+Re-import the latest release `.mcpack`. Pack UUID is stable; newer semver replaces the previous install.
 
 ## Troubleshooting
 
 | Problem | Fix |
 |---------|-----|
 | Import failed | Update Minecraft to 1.21.0+ |
-| Textures unchanged | Confirm pack is in **Active** global or world resources |
-| Checkerboard blocks | Pack not applied — re-import and activate |
-| Java Edition | This pack is Bedrock only |
+| Textures unchanged | Confirm pack is in **Active** resources |
+| Checkerboard blocks | Re-import and activate |
+| Java Edition | Bedrock only |
 
 ## Sample build
 
-To place the included Cave of Snakes vignette:
-
 ```bash
-python3 variants/sunlit-diorama/scripts/diorama_mc_tool.py --mode convert \
-  --level variants/sunlit-diorama/levels/sample_level.json \
+python3 variants/cel-band/scripts/diorama_mc_tool.py --mode convert \
+  --level variants/cel-band/levels/sample_level.json \
   --origin 100,64,200
 ```
-
-Use the generated `sample_level.setblock` commands in a command block or `/function` setup at the chosen origin.

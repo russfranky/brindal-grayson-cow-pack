@@ -37,5 +37,5 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/Sunlit_Diorama.mcpack
+          files: dist/Cel_Band_Pack.mcpack
           generate_release_notes: true

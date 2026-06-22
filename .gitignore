@@ -1,6 +1,6 @@
 # Build outputs (rebuilt locally; dist/ committed for release installs)
-variants/sunlit-diorama/build/
-variants/sunlit-diorama/Sunlit_Diorama.mcpack
+variants/cel-band/build/
+variants/cel-band/Cel_Band_Pack.mcpack
 build/
 out/
 

@@ -3,12 +3,12 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-VARIANT="$ROOT/variants/sunlit-diorama"
+VARIANT="$ROOT/variants/cel-band"
 
 echo "Removing build outputs..."
 rm -rf \
   "$VARIANT/build" \
-  "$VARIANT/Sunlit_Diorama.mcpack" \
+  "$VARIANT/Cel_Band_Pack.mcpack" \
   "$ROOT/download/diorama_mc_output"
 
 echo "Clean complete. Rebuild with: ./scripts/build_pack.sh"
