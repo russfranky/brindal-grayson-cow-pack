@@ -1,90 +1,88 @@
-# Cel Band Toolkit
+# Cel Band Pack
 
-A **Minecraft Bedrock 1.21+ cel-band system** for builders: procedural block textures, a voxel level converter, and a tile specification — not just a resource pack.
+A **Minecraft Bedrock 1.21+ resource pack** built from converted cel-band textures — not procedurally generated at build time.
 
-| Component | What it does |
-|-----------|--------------|
-| **Cel Band Pack** | Global resource pack — four-step cel bands, Holstein spots, ink outlines |
-| **Voxel converter** | Level JSON → `/setblock` commands and `.mcfunction` files |
-| **Voxel spec** | 12 tile types, palette rules, builder reference (PDF) |
+| What | Description |
+|------|-------------|
+| **Texture pack** | Committed PNG overrides in `variants/cel-band/pack/` |
+| **Build** | Zips those assets into `Cel_Band_Pack.mcpack` |
+| **Level converter** | Maps tile JSON to Bedrock `/setblock` placements |
 
 ---
 
-## Install the pack
-
-### Option A — Latest release
+## Install
 
 **[Cel_Band_Pack.mcpack](https://github.com/russfranky/charles-world-of-chaos/releases/latest/download/Cel_Band_Pack.mcpack)**
 
-1. Open the file on your device (or import via Minecraft).
-2. Go to **Settings → Global Resources** and activate **Cel Band Pack**.
-3. Load any Bedrock world — block textures update immediately.
+1. Import the `.mcpack` on your device.
+2. **Settings → Global Resources** → activate **Cel Band Pack**.
+3. Open any Bedrock 1.21+ world.
 
-### Option B — Build from source
+Or build locally:
 
 ```bash
-pip3 install -r requirements.txt
 ./scripts/build_pack.sh
 ```
-
-Output: `dist/Cel_Band_Pack.mcpack`. See [docs/installation.md](docs/installation.md).
 
 ---
 
 ## Visual system
 
-Four cel bands map to vanilla blocks for in-game placement:
+Converted block textures replace vanilla surfaces with four cel bands:
 
 | Band | Block | Use |
 |------|-------|-----|
-| Lit cream | `calcite` | Top faces, highlights |
-| Warm sand | `stone` | Lit side faces |
-| Warm brown | `deepslate` | Occluded sides |
-| Deep shadow | `bedrock` | Cave floors, underhangs |
+| Lit cream | `calcite` | Top faces |
+| Warm sand | `stone` | Lit sides |
+| Warm brown | `deepslate` | Shadow sides |
+| Deep shadow | `bedrock` | Cave floors |
 
-Holstein spot masks and ink outlines are baked into block textures. Relic blocks (gold, emerald, copper) use bronze and jade tones. Water, moss, bark, and dirt each have their own three-band variants.
+Gold, emerald, and copper blocks use converted relic palettes. Items and UI chrome are included in the pack source.
 
 ---
 
-## Voxel pipeline
+## Adding or updating textures
 
-Author levels as JSON, convert to Bedrock placements:
+1. Place converted PNGs under `variants/cel-band/pack/textures/`.
+2. Update `variants/cel-band/pack/manifest.json` only if name or version changes.
+3. Run `./scripts/build_pack.sh`.
+
+The build does not synthesize textures — it packages what is already in `pack/`.
+
+---
+
+## Level conversion
+
+Tile-based level JSON converts to Bedrock placements:
 
 ```bash
-python3 variants/cel-band/scripts/diorama_mc_tool.py --mode convert \
+python3 variants/cel-band/scripts/convert_level.py \
   --level variants/cel-band/levels/sample_level.json \
-  --origin 100,64,200
+  --origin 100,64,200 \
+  --output download/
 ```
 
-The included **Cave of Snakes** sample (`download/sample_level.json`) exercises all 12 tile types.
+The sample **Cave of Snakes** level ships in `download/sample_level.json`.
 
 ---
 
 ## Repository layout
 
-| Path | Description |
-|------|-------------|
-| `dist/Cel_Band_Pack.mcpack` | Shipped resource pack |
-| `variants/cel-band/` | Generator source, sample level, version |
-| `variants/cel-band/scripts/diorama_mc_tool.py` | Textures + pack + voxel converter |
-| `download/` | Release bundle (pack, tool, sample, voxel spec PDF) |
+| Path | Role |
+|------|------|
+| `variants/cel-band/pack/` | Converted textures + manifest (source of truth) |
+| `variants/cel-band/scripts/assemble_pack.py` | Zip pack → `.mcpack` |
+| `variants/cel-band/scripts/convert_level.py` | Level JSON → setblock / mcfunction |
+| `dist/Cel_Band_Pack.mcpack` | Shipped distributable |
+| `download/` | Release bundle mirror |
 
 ---
 
 ## Documentation
 
-- [Installation guide](docs/installation.md)
-- [Development guide](docs/development.md)
+- [Installation](docs/installation.md)
+- [Development](docs/development.md)
 - [Voxel spec PDF](download/Voxel_Spec.pdf)
-
----
-
-## Requirements
-
-| Requirement | Notes |
-|-------------|-------|
-| Minecraft Bedrock 1.21.0+ | Not Java Edition |
-| Python 3.11+ | For local builds (`Pillow`) |
 
 ---
 

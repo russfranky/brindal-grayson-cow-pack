@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Cel Band Toolkit build artifacts."""
+"""Validate Cel Band Pack build artifacts."""
 
 from __future__ import annotations
 
@@ -10,8 +10,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PACK = ROOT / "dist" / "Cel_Band_Pack.mcpack"
+PACK_SRC = ROOT / "variants" / "cel-band" / "pack"
 SAMPLE = ROOT / "download" / "sample_level.json"
-TOOL = ROOT / "variants" / "cel-band" / "scripts" / "diorama_mc_tool.py"
 
 
 def fail(message: str) -> None:
@@ -20,13 +20,16 @@ def fail(message: str) -> None:
 
 
 def main() -> None:
-    if not TOOL.is_file():
-        fail(f"missing generator: {TOOL}")
+    if not PACK_SRC.is_dir():
+        fail(f"missing pack source: {PACK_SRC}")
+
+    if not (PACK_SRC / "manifest.json").is_file():
+        fail("pack source missing manifest.json")
 
     if not PACK.is_file():
         fail(f"missing distributable: {PACK}")
 
-    if PACK.stat().st_size < 5_000:
+    if PACK.stat().st_size < 8_000:
         fail(f"pack too small: {PACK.stat().st_size} bytes")
 
     with zipfile.ZipFile(PACK) as archive:
@@ -47,7 +50,7 @@ def main() -> None:
 
     level = json.loads(SAMPLE.read_text())
     tiles = level.get("tiles", [])
-    if len(tiles) < 35:
+    if len(tiles) < 40:
         fail(f"sample level too small: {len(tiles)} tiles")
 
     print("validate_pack: OK")

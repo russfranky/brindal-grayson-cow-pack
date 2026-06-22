@@ -1,6 +1,5 @@
 # Build outputs (rebuilt locally; dist/ committed for release installs)
 variants/cel-band/build/
-variants/cel-band/Cel_Band_Pack.mcpack
 build/
 out/
 

@@ -4,7 +4,7 @@
 
 ## Type of Change
 
-- [ ] Texture or palette update
+- [ ] Converted texture update
 - [ ] Level or voxel converter change
 - [ ] Bug fix
 - [ ] Documentation

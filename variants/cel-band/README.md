@@ -1,31 +1,19 @@
-# Cel Band Toolkit — Bedrock 1.21+
+# Cel Band Pack — Bedrock 1.21+
 
-Four-step cel bands, Holstein spots, ink outlines, and a voxel level converter for Minecraft Bedrock.
+Converted cel-band textures packaged for Minecraft Bedrock.
 
-## Quick start
+## Build
 
 ```bash
 ./scripts/build_pack.sh
-
-python3 variants/cel-band/scripts/diorama_mc_tool.py --mode all \
-  --output variants/cel-band/build
 ```
 
-## Cel bands
+## Source
 
-| Band | Block | Use |
-|------|-------|-----|
-| Lit cream | `calcite` | Top faces |
-| Warm sand | `stone` | Lit sides |
-| Warm brown | `deepslate` | Shadow sides |
-| Deep shadow | `bedrock` | Cave floors |
+Converted PNGs live in `pack/`. The build zips them — it does not generate new art.
 
-## Files
+## Level conversion
 
-| Path | Role |
-|------|------|
-| `scripts/diorama_mc_tool.py` | Textures, pack assembly, voxel conversion |
-| `levels/sample_level.json` | Cave of Snakes sample (12 tile types) |
-| `VERSION` | Pack semver |
-
-Install: `dist/Cel_Band_Pack.mcpack` → **Settings → Global Resources**.
+```bash
+python3 scripts/convert_level.py --level levels/sample_level.json
+```

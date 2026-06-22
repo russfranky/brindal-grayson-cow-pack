@@ -1,39 +1,25 @@
 # Contributing
 
-Thank you for improving the **Cel Band Toolkit** for Minecraft Bedrock.
-
-## Repository layout
+## Layout
 
 | Path | Role |
 |------|------|
-| `variants/cel-band/scripts/diorama_mc_tool.py` | Texture generator, pack assembler, voxel converter |
+| `variants/cel-band/pack/` | Converted PNG textures and manifest |
+| `variants/cel-band/scripts/assemble_pack.py` | Packages `pack/` into `.mcpack` |
+| `variants/cel-band/scripts/convert_level.py` | Tile JSON → Bedrock placements |
 | `variants/cel-band/levels/` | Sample level JSON |
-| `variants/cel-band/VERSION` | Pack semver (bumped on release) |
-| `dist/` | Committed distributable `.mcpack` |
-| `download/` | Release bundle mirrored from builds |
 
-## Build and validate
+## Workflow
 
 ```bash
-pip3 install -r requirements.txt
 ./scripts/build_pack.sh
 python3 scripts/validate_pack.py
-./scripts/clean.sh   # remove local build dirs only
 ```
 
-## Conventions
-
-- **Palette changes** — edit `PALETTE` and tile mappings in `diorama_mc_tool.py`, then rebuild.
-- **Pack UUID** — do not change manifest UUIDs after a public release.
-- **Versioning** — `variants/cel-band/VERSION` follows semver; `publish.yml` bumps patch on merge to `main`.
-- **Pre-commit** — `pip install -r requirements.txt && pre-commit install`
+To ship new art: add or replace PNGs in `variants/cel-band/pack/`, then rebuild. Do not regenerate textures in CI — commit the converted assets.
 
 ## Pull requests
 
-1. Run `./scripts/build_pack.sh` and `python3 scripts/validate_pack.py`.
-2. Describe palette, level, or tooling changes.
-3. Attach in-game screenshots when texture output changes.
-
-## Issues
-
-Open a [GitHub Issue](https://github.com/russfranky/charles-world-of-chaos/issues) with Minecraft version, platform, and steps to reproduce.
+- Run build + validate before opening.
+- Include screenshots when texture files change.
+- Note which source assets were converted when adding textures.
