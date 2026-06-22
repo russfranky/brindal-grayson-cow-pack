@@ -385,6 +385,105 @@ def scenario_breed_inherits_parents() -> None:
         assert_true(child[slot] in values or child.get("gen", 0) > 0, f"child {slot} should inherit")
 
 
+def scenario_barn_full_blocks_catch() -> None:
+    """Legend rank (30 slots) is the only capacity where barn can be full."""
+    p = PlayerSession(barn=default_barn())
+    while len(p.barn["cows"]) < 30:
+        p.barn["cows"].append({"id": next_cow_id(p.barn), **random_gen0_traits()})
+    assert_true(barn_rank(p.barn)["id"] == "legend", "should be legend rank at 30 cows")
+    p.wild_cows_nearby = 3
+    before = len(p.barn["cows"])
+    p.catch_wild()
+    assert_true(len(p.barn["cows"]) == before, "full barn should reject catch")
+
+
+def scenario_breed_cooldown_blocks() -> None:
+    p = PlayerSession(barn=default_barn())
+    for _ in range(2):
+        c = {"id": next_cow_id(p.barn), **random_gen0_traits()}
+        c["hunger"] = 90
+        c["mood"] = 90
+        p.barn["cows"].append(c)
+    assert_true(p.try_breed(), "first breed should succeed")
+    assert_true(p.barn["breedCooldown"] > 0, "cooldown should be set")
+    before = len(p.barn["cows"])
+    assert_true(not p.try_breed(), "breed during cooldown should fail")
+    assert_true(len(p.barn["cows"]) == before, "no extra cow during cooldown")
+
+
+def scenario_rank_progression() -> None:
+    barn = default_barn()
+    cases = [
+        (1, "pen"),
+        (3, "yard"),
+        (6, "ranch"),
+        (10, "spread"),
+        (18, "legend"),
+    ]
+    for count, expected_id in cases:
+        barn = default_barn()
+        while len(barn["cows"]) < count:
+            barn["cows"].append({"id": next_cow_id(barn), **random_gen0_traits()})
+        rank = barn_rank(barn)
+        assert_true(rank["id"] == expected_id, f"{count} cows should be {expected_id}, got {rank['id']}")
+
+
+def scenario_calf_feeds_to_adult() -> None:
+    p = PlayerSession(barn=default_barn())
+    calf = {"id": next_cow_id(p.barn), **random_gen0_traits(), "feedsToAdult": 3}
+    p.barn["cows"].append(calf)
+    p.barn["activeId"] = calf["id"]
+    for _ in range(3):
+        p.feed_active()
+    assert_true(calf["feedsToAdult"] == 0, "calf should become adult after 3 feeds")
+
+
+def scenario_hunger_auto_recall() -> None:
+    p = PlayerSession(barn=default_barn())
+    cow = p.active_cow()
+    assert cow is not None
+    p.deploy()
+    cow["hunger"] = 14
+    p.decay_tick(persist=False)
+    assert_true(p.deployed_entity_id is None, "deployed cow should auto-recall when hunger < 15")
+
+
+def scenario_adults_not_ready_blocks_breed() -> None:
+    p = PlayerSession(barn=default_barn())
+    for _ in range(2):
+        c = {"id": next_cow_id(p.barn), **random_gen0_traits()}
+        c["hunger"] = 30
+        c["mood"] = 40
+        p.barn["cows"].append(c)
+    assert_true(not p.try_breed(), "low hunger/mood should block breeding")
+
+
+def scenario_bell_mode_cycles() -> None:
+    p = PlayerSession(barn=default_barn())
+    seen = []
+    for _ in range(8):
+        seen.append(BELL_MODES[p.barn["bellMode"]])
+        p.bell_tap()
+    assert_true(seen[:4] == BELL_MODES, "first cycle should hit all modes in order")
+    assert_true(seen[4:8] == BELL_MODES, "second cycle should repeat")
+
+
+def scenario_entity_type_mapping() -> None:
+    assert_true(entity_type_for_cow({"coat": "spot"}) == SPOT_COW, "spot → brindal")
+    assert_true(entity_type_for_cow({"coat": "storm"}) == STORM_COW, "storm → grayson")
+    assert_true(entity_type_for_cow({"coat": "shine"}) == STORM_COW, "shine → grayson")
+    assert_true(entity_type_for_cow({"coat": "brown"}) == COW, "brown → vanilla")
+
+
+def scenario_max_slots_per_rank() -> None:
+    cases = [(1, 3), (3, 6), (6, 10), (10, 18), (18, 30)]
+    for count, expected_slots in cases:
+        barn = default_barn()
+        while len(barn["cows"]) < count:
+            barn["cows"].append({"id": next_cow_id(barn), **random_gen0_traits()})
+        assert_true(max_slots(barn) == expected_slots, f"{count} cows → {expected_slots} slots")
+
+
 def run_all() -> list[str]:
     issues: list[str] = []
     scenarios = [
@@ -396,6 +495,15 @@ def run_all() -> list[str]:
         ("recall_cycles_active", scenario_recall_cycles_active),
         ("cow_ids_monotonic", scenario_cow_ids_monotonic),
         ("breed_inherits_parents", scenario_breed_inherits_parents),
+        ("barn_full_blocks_catch", scenario_barn_full_blocks_catch),
+        ("breed_cooldown_blocks", scenario_breed_cooldown_blocks),
+        ("rank_progression", scenario_rank_progression),
+        ("calf_feeds_to_adult", scenario_calf_feeds_to_adult),
+        ("hunger_auto_recall", scenario_hunger_auto_recall),
+        ("adults_not_ready_blocks_breed", scenario_adults_not_ready_blocks_breed),
+        ("bell_mode_cycles", scenario_bell_mode_cycles),
+        ("entity_type_mapping", scenario_entity_type_mapping),
+        ("max_slots_per_rank", scenario_max_slots_per_rank),
     ]
     for name, fn in scenarios:
         try:
